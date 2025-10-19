@@ -1,0 +1,24 @@
+<nav class="nav-panel">
+    <div class="nav-header">
+        <span class="nav-logo-icon">📘</span>
+        <span class="nav-logo-text">Pealim Local Dictionary</span>
+    </div>
+    <div class="nav-buttons">
+        <a href="/"
+           class="nav-btn {% if request.path == '/' %}active{% endif %}">
+            Home
+        </a>
+        <a href="/database"
+           class="nav-btn {% if request.path == '/database' %}active{% endif %}">
+            Database
+        </a>
+        <a href="/dictionary"
+           class="nav-btn {% if request.path == '/dictionary' %}active{% endif %}">
+            Dictionary
+        </a>
+        <a href="/selected"
+           class="nav-btn {% if request.path == '/selected' %}active{% endif %}">
+            Selected
+        </a>
+    </div>
+</nav>

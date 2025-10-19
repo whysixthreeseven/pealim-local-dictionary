@@ -1,0 +1,75 @@
+$color-bg: #f9fafc;
+$color-text: #1a202c;
+$color-muted: #4a5568;
+$color-accent: #00b4d8;
+$color-highlight: #ffe066;
+$font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+.nav-panel {
+    width: 100%;
+    background: $color-bg;
+    padding: 1rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    font-family: $font-mono;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.05);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+}
+
+.nav-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+
+    .nav-logo-icon {
+        font-size: 1.8rem;
+    }
+
+    .nav-logo-text {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: $color-text;
+        background: linear-gradient(120deg, transparent 60%, $color-highlight 60%);
+        padding: 0 0.3rem;
+        border-radius: 6px;
+    }
+}
+
+.nav-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+
+.nav-btn {
+    display: inline-block;
+    padding: 0.7rem 1.3rem;
+    background: white;
+    color: $color-muted;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    position: relative;
+
+    &:hover {
+        background: $color-accent;
+        color: white;
+        box-shadow: 0 3px 10px rgba(0, 180, 216, 0.3);
+        transform: translateY(-2px);
+    }
+
+    &.active {
+        background: $color-highlight;
+        color: $color-text;
+        font-weight: 600;
+        box-shadow: 0 2px 5px rgba(255, 224, 102, 0.5);
+        transform: translateY(-1px);
+    }
+}
