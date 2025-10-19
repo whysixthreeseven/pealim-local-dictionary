@@ -36,9 +36,7 @@ def verify_json_collection() -> bool:
             json_file_data = json.load(json_file)
         
         # Logging:
-        log.info(f"JSON - Total entries: {len(json_file_data)}")
-        log.info(f"JSON - Min index: {min(json_file_data)}")
-        log.info(f"JSON - Max index: {max(json_file_data)}")
+        log.info(f"JSON total entries: {len(json_file_data)}")
         
         # Checking for duplicates:
         json_data_count: int = len(json_file_data)

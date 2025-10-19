@@ -13,16 +13,16 @@ BLUEPRINT AND VARIABLES BLOCK
 """
 
 # Generating blueprint:
-INDEX_BLUEPRINT: Blueprint = Blueprint(
-    name = "index", 
+SELECTED_BLUEPRINT: Blueprint = Blueprint(
+    name = "selected", 
     import_name = __name__,
     template_folder = SETTINGS.FOLDER_TEMPLATES_PATH,
     static_folder = SETTINGS.FOLDER_STATIC_PATH,
     )
 
 # Getting constants:
-INDEX_PAGE_URL: str = "/"
-INDEX_PAGE_HTML: str = "index.html"
+SELECTED_PAGE_URL: str = "/selected"
+SELECTED_PAGE_HTML: str = "selected.html"
 
 
 """
@@ -32,12 +32,12 @@ ROUTING AND LOGIC BLOCK
 """
 
 
-@INDEX_BLUEPRINT.route(rule = INDEX_PAGE_URL)
-def index() -> str:
+@SELECTED_BLUEPRINT.route(rule = SELECTED_PAGE_URL)
+def selected() -> str:
 
     # Getting route page rendered:
     page_route: str = render_template(
-        template_name_or_list = INDEX_PAGE_HTML
+        template_name_or_list = SELECTED_PAGE_HTML
         )
     
     # Returning:

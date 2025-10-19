@@ -128,13 +128,17 @@ REGISTERING BLUEPRINTS
 
 
 # Importing blueprints:
-from routes.index import INDEX_BLUEPRINT
+from routes.home import HOME_BLUEPRINT
+from routes.dictionary import DICTIONARY_BLUEPRINT
 from routes.database import DATABASE_BLUEPRINT
+from routes.selected import SELECTED_BLUEPRINT
 
 
 # Registering blueprints:
-application.register_blueprint(blueprint = INDEX_BLUEPRINT)
+application.register_blueprint(blueprint = HOME_BLUEPRINT)
+application.register_blueprint(blueprint = DICTIONARY_BLUEPRINT)
 application.register_blueprint(blueprint = DATABASE_BLUEPRINT)
+application.register_blueprint(blueprint = SELECTED_BLUEPRINT)
 
 # Logging:
 log.info("Routing blueprints registered")
