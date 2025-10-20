@@ -112,12 +112,12 @@ JSON COLLECTION AQUIRING & VERIFICATION
 
 
 # Scripts import:
-from utilities import collector, verification
+from utilities import collect, verification
 
 # Running verification:
 json_verified: bool = verification.verify_json_collection()
 if not json_verified:
-    collector.collect_dictionary()
+    collect.collect_dictionary()
 
     
 """

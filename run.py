@@ -3,7 +3,7 @@ TODO: Create a docstring.
 """
 
 
-from utilities.collector import collect_dictionary
+from utilities.collect import collect_dictionary
 collect_dictionary()
 
 

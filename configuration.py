@@ -35,8 +35,10 @@ _DB_COMMON_FILENAME: str = "common.db"
 _DB_COMMON_FILEPATH: str = os.path.join(_FOLDER_DATABASE_PATH, _DB_COMMON_FILENAME)
 
 # Collection filename and -path variables:
-_JSON_COLLECTION_FILENAME: str = "collection.json"
+_JSON_COLLECTION_FILENAME: str = "dict_collection.json"
 _JSON_COLLECTION_FILEPATH: str = os.path.join(_FOLDER_UTILITIES_PATH, _JSON_COLLECTION_FILENAME)
+_JSON_MISSING_FILENAME: str = "dict_missing.json"
+_JSON_MISSING_FILEPATH: str = os.path.join(_FOLDER_UTILITIES_PATH, _JSON_MISSING_FILENAME)
 
 
 """
@@ -83,4 +85,5 @@ class SETTINGS:
     # Database and collection configuration:
     DATABASE_FILEPATH:        str = _DB_COMMON_FILEPATH
     JSON_COLLECTION_FILEPATH: str = _JSON_COLLECTION_FILEPATH
+    JSON_MISSING_FILEPATH:    str = _JSON_MISSING_FILEPATH
     

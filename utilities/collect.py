@@ -25,7 +25,7 @@ SCARPPER CLASS INSTANCE BLOCK
 """
 
 
-class MultiLanguageScraper:
+class Scraper:
 
     
     def __init__(self, page_count_max: int, batch_size: int):
@@ -35,8 +35,9 @@ class MultiLanguageScraper:
         self.paelim_page_batch: int = batch_size
         
         # Results dictionary:
-        self.results: dict[str, dict[str, str]] = {}
-        
+        self.scrap_results: dict[str, dict[str, str]] = {}
+        self.scrap_missing: list[int] = []
+
         # URL and locale attributes:
         self.paelim_url = "https://www.pealim.com/{lang}/dict/{page_id}"
         self.locale_list: tuple[str, ...] = ("ru", "en", "he")
@@ -64,6 +65,7 @@ class MultiLanguageScraper:
                 
                 # Asserting connection:
                 if response.status != 200:
+                    self.scrap_missing.append(page_index)
                     return None
                     
                 # Acquiring page document:
@@ -71,6 +73,7 @@ class MultiLanguageScraper:
                 
                 # Asserting dictionary instance exists (internally):
                 if 'class="not-found"' in html_document:
+                    self.scrap_missing.append(page_index)
                     return None
                 
                 # Parsing document with soup extension:
@@ -85,10 +88,12 @@ class MultiLanguageScraper:
                     page_content: dict[str, str] = {"lead": lead_content, "container": container_content}
                     return page_content
                 else:
+                    self.scrap_missing.append(page_index)
                     return None
                     
         except Exception as e:
             print(f"Error fetching {page_url}: {e}")
+            self.scrap_missing.append(page_index)
             return None
     
     
@@ -97,11 +102,11 @@ class MultiLanguageScraper:
                           page_index: int) -> bool:
         
         # Cycling through available locales:
-        for lang in self.locale_list:
+        for language in self.locale_list:
             
             # Generating and connecting to page url:
             page_url = self.paelim_url.format(
-                lang = lang, 
+                lang = language, 
                 page_id = page_index
                 )
             try:
@@ -110,12 +115,17 @@ class MultiLanguageScraper:
                         html_document = await response.text()
                         if 'class="not-found"' not in html_document:
                             return True
+                        else:
+                            if page_index not in self.scrap_missing:
+                                self.scrap_missing.append(page_index)
             
             # Continue to next language, if not found:
             except:
                 continue
             
         # If none found, returning:
+        if page_index not in self.scrap_missing:
+            self.scrap_missing.append(page_index)
         return False
     
     
@@ -179,8 +189,8 @@ class MultiLanguageScraper:
         
         # Configuring client session:
         conf_connector = aiohttp.TCPConnector(
-            limit = 50, 
-            limit_per_host = 10
+            limit = 10, 
+            limit_per_host = 5
             )
         conf_timeout = aiohttp.ClientTimeout(
             total = 30
@@ -194,11 +204,11 @@ class MultiLanguageScraper:
             ) as session:
             
             # Filtering out pages that are already in results
-            page_index_all = list(range(1, self.paelim_page_count + 1))
+            page_index_all = list(range(6211, self.paelim_page_count + 1))
             page_index_remaining: list[int] = [
                 page_index for page_index
                 in page_index_all
-                if str(page_index) not in self.results
+                if str(page_index) not in self.scrap_results
                 ]
             paelim_page_range: range = range(0, len(page_index_remaining), self.paelim_page_batch)      # Start, Stop, Step
         
@@ -215,8 +225,57 @@ class MultiLanguageScraper:
                 elapsed_time = time.time() - start_time
                 
                 # Updating results:
-                self.results.update(batch_results)
-                print(f"Batch completed in {elapsed_time:.2f}s. Found {len(batch_results)} valid pages. Total so far: {len(self.results)}")
+                self.scrap_results.update(batch_results)
+                print(f"Batch completed in {elapsed_time:.2f}s. Found {len(batch_results)} valid pages. Total so far: {len(self.scrap_results)}")
+                
+                # Saving progress after each batch task:
+                self.save_progress()
+
+    
+    async def run_missing(self):
+        """
+        TODO: Create a docstring.
+        """
+        
+        # Configuring client session:
+        conf_connector = aiohttp.TCPConnector(
+            limit = 10, 
+            limit_per_host = 5
+            )
+        conf_timeout = aiohttp.ClientTimeout(
+            total = 30
+            )
+        conf_headers: dict[str, str] = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'} 
+        
+        async with aiohttp.ClientSession(
+            connector = conf_connector,
+            timeout = conf_timeout,
+            headers = conf_headers
+            ) as session:
+            
+            # Filtering out pages that are already in results
+            page_index_remaining: list[int] = [
+                page_index for page_index
+                in self.scrap_missing
+                if str(page_index) not in self.scrap_results
+                ]
+            paelim_page_range: range = range(0, len(page_index_remaining), self.paelim_page_batch)      # Start, Stop, Step
+        
+            # Processing task pages:
+            for index in paelim_page_range:
+                batch_index = page_index_remaining[index:index + self.paelim_page_batch]
+                batch_number = index//self.paelim_page_batch + 1
+                total_batches = len(paelim_page_range)
+                print(f"\nProcessing batch {batch_number}/{total_batches}: pages {batch_index[0]}-{batch_index[-1]}")
+                
+                # Starting task on batch:
+                start_time = time.time()
+                batch_results = await self.process_batch(session, batch_index)
+                elapsed_time = time.time() - start_time
+                
+                # Updating results:
+                self.scrap_results.update(batch_results)
+                print(f"Batch completed in {elapsed_time:.2f}s. Found {len(batch_results)} valid pages. Total so far: {len(self.scrap_results)}")
                 
                 # Saving progress after each batch task:
                 self.save_progress()
@@ -228,15 +287,25 @@ class MultiLanguageScraper:
         """
         
         # Opening and saving results to JSON file:
-        json_filepath: str = SETTINGS.JSON_COLLECTION_FILEPATH
-        with open(file = json_filepath, mode = 'w', encoding = 'UTF-8') as json_file:
+        json_collection_filepath: str = SETTINGS.JSON_COLLECTION_FILEPATH
+        with open(file = json_collection_filepath, mode = 'w', encoding = 'UTF-8') as json_file:
             json.dump(
-                obj = self.results, 
+                obj = self.scrap_results, 
                 fp = json_file, 
                 indent = 2, 
                 ensure_ascii = False
                 )
-        print(f"Progress saved to {json_filepath}")
+        print(f"Progress saved to {json_collection_filepath}")
+
+        # Saving missing files:
+        json_missing_filepath: str = SETTINGS.JSON_MISSING_FILEPATH
+        with open(file = json_missing_filepath, mode = 'w', encoding = 'UTF-8') as json_file:
+            json.dump(
+                obj = self.scrap_missing, 
+                fp = json_file, 
+                indent = 2, 
+                ensure_ascii = False
+                )
     
     
     def load_progress(self):
@@ -248,10 +317,10 @@ class MultiLanguageScraper:
         try:
             json_filepath: str = SETTINGS.JSON_COLLECTION_FILEPATH
             with open(file = json_filepath, mode = 'r', encoding = 'UTF-8') as json_file:
-                self.results = json.load(
+                self.scrap_results = json.load(
                     fp = json_file
                     )
-            log.info(f"Loaded {len(self.results)} existing entries..")
+            log.info(f"Loaded {len(self.scrap_results)} existing entries..")
         
         # Raising error, if no file found:
         except FileNotFoundError:
@@ -272,11 +341,11 @@ async def __collect_dictionary():
     
     # Default task values:
     PAELIM_PAGE_MAX: int = 10000
-    PAELIM_PAGE_BATCH: int = 100
+    PAELIM_PAGE_BATCH: int = 10
     
     # Calling Scrapper and continuing (if task exists)
     log.info(f"Scrapper instance initialized with {PAELIM_PAGE_MAX=} & {PAELIM_PAGE_BATCH=}")
-    scraper = MultiLanguageScraper(
+    scraper = Scraper(
         page_count_max = PAELIM_PAGE_MAX, 
         batch_size = PAELIM_PAGE_BATCH
         )
@@ -284,10 +353,12 @@ async def __collect_dictionary():
     
     # Running the scrapper:
     await scraper.run()
+    await scraper.run_missing()
     
     # Finalizing and saving JSON file:
     scraper.save_progress()
-    log.info(f"Scraping completed. Found f{len(scraper.results)} valid pages!")
+    log.info(f"Scraping completed. Found f{len(scraper.scrap_results)} valid pages!")
+    log.info(f"Pages missing: f{scraper.scrap_missing}")
     
 
 def collect_dictionary():
