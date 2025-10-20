@@ -6,6 +6,9 @@ log = logging.getLogger(__name__)
 from bs4 import BeautifulSoup
 import json
 
+# Typing and annotations:
+from typing import Dict, List
+
 # Local settings import:
 from configuration import SETTINGS
 
@@ -20,270 +23,270 @@ COMPOSE LOGIC FUNCTIONS
 
 """
 
-
-def compose() -> None:
-    """
-    TODO: Create a docstring.
-    """
-
-    ...
-
-
 import json
-from typing import Dict, List
+from typing import Dict, List, Optional
+from bs4 import BeautifulSoup
 
 
-class Processor:
-    """
-    TODO: Create a docstring.
-    """
+class JSONToWordModelConverter:
+    """Converts JSON dictionary data to Word model instances"""
     
-    def __init__(self):
-        self.json_data = self.load_json_data()
+    def __init__(self, json_filepath: str):
+        self.json_filepath = json_filepath
+        self.data = self._load_json_data()
     
-    
-    def load_json_data(self) -> Dict:
-        """
-        TODO: Create a docstring.
-        """
-        
-        # Attempting to load file and extract data:
+    def _load_json_data(self) -> Dict:
+        """Load JSON data from file"""
         try:
-            json_collection_path: str = SETTINGS.JSON_COLLECTION_FILEPATH
-            with open(file = json_collection_path, mode = 'r', encoding = 'UTF-8') as json_file:
-                return json.load(json_file)
-            
-        # Raising error, if file cannot be opened or decoded:
-        except FileNotFoundError:
-            print(f"JSON file not found: {json_collection_path}")
-            return {}
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON: {e}")
+            with open(self.json_filepath, 'r', encoding='utf-8') as f:
+                return json.load(f)
+        except (FileNotFoundError, json.JSONDecodeError) as e:
+            print(f"Error loading JSON: {e}")
             return {}
     
-
-    def extract_lead_content(self, html_content: str, language: str = "ru") -> str:
+    def extract_hebrew_word(self, container_html: str) -> Optional[str]:
         """
-        TODO: Create a docstring. Extract text content from lead div.
+        Extract Hebrew word from <h2 class='page-header'> element.
+        Finds the first token in the header text that contains Hebrew characters.
         """
+        import re 
         
-        if not html_content:
-            return ""
-        
-        if language == "he":
-            if not html_content:
-                return ""
-                
-            try:
-                soup = BeautifulSoup(html_content, 'html.parser')
-                page_header = soup.find('h2', class_='page-header')
-                
-                if not page_header:
-                    return ""
-                
-                # Get the text content and remove any print-specific spans
-                header_text = page_header.get_text()
-                
-                # Split by spaces and get the last element (Hebrew word)
-                words = header_text.strip().split()
-                if words:
-                    hebrew_word = words[-1]
-                    # Basic validation - check if it contains Hebrew characters
-                    if any('\u0590' <= char <= '\u05FF' for char in hebrew_word):
-                        return hebrew_word
-                
-                return ""
-                
-            except Exception as e:
-                print(f"Error extracting Hebrew word: {e}")
-                return ""
-
-        
-        else:
-            
-            try:
-                soup = BeautifulSoup(html_content, 'html.parser')
-                lead_div = soup.find('div', class_='lead')
-                return lead_div.get_text(strip=True) if lead_div else ""
-            except Exception as e:
-                print(f"Error extracting lead content: {e}")
-                return ""
-    
-    
-    def process_entry(self, page_index: str, entry_data: Dict) -> Word:
-        """
-        TODO: Create a docstring.
-        
-        Process a single JSON entry and create a Word model instance
-        """
-        
-        # Extracting HTML containers for each language:
-        container_ru = entry_data.get('ru', {}).get('container', '')
-        container_en = entry_data.get('en', {}).get('container', '')
-        container_he = entry_data.get('he', {}).get('container', '')
-        
-        # Extracting translations from lead content:
-        translation_ru = self.extract_lead_content(
-            html_content = entry_data.get('ru', {}).get('lead', ''),
-            language = "ru"
-            )
-        translation_en = self.extract_lead_content(
-            html_content = entry_data.get('en', {}).get('lead', ''),
-            language = "en",
-            )
-        translation_he = self.extract_lead_content(
-            html_content = container_he,
-            language = "he"
-            )
-        
-        # Creating database Word instance object:
-        word_instance = Word(
-            
-            # Getting index from page index:
-            INDEX = int(page_index),
-            
-            # Populating html containers for later rendering and composing:
-            HTML_CONTAINER_LANG_RU = container_ru,
-            HTML_CONTAINER_LANG_EN = container_en,
-            HTML_CONTAINER_LANG_HE = container_he,
-            
-            # Extracting word translation:
-            TRANSLATION_LANG_RU = translation_ru or None,
-            TRANSLATION_LANG_EN = translation_en or None,
-            TRANSLATION_LANG_HE = translation_he or None,
-            
-            # Transcribtion fields will be populated later:
-            TRANSCRIBTION_LANG_RU = None,
-            TRANSCRIBTION_LANG_EN = None
-            )
-        
-        return word_instance
-    
-    
-    def test_single_entry(self, page_index: str = "1"):
-        """Test processing a single entry"""
-        if page_index not in self.json_data:
-            print(f"Page index {page_index} not found in JSON data")
+        if not container_html:
+            print("❌ No container HTML provided")
             return None
-        
-        print(f"Testing processing for page index: {page_index}")
-        print("=" * 50)
-        
-        entry_data = self.json_data[page_index]
-        word_instance = self.process_entry(page_index, entry_data)
-        
-        # Display results
-        print(f"Created Word instance:")
-        print(f"  INDEX: {word_instance.INDEX}")
-        print(f"  RU Translation: {word_instance.TRANSLATION_LANG_RU}")
-        print(f"  EN Translation: {word_instance.TRANSLATION_LANG_EN}")
-        print(f"  HE Translation: {word_instance.TRANSLATION_LANG_HE}")
-        print(f"  RU Container length: {len(word_instance.HTML_CONTAINER_LANG_RU)}")
-        print(f"  EN Container length: {len(word_instance.HTML_CONTAINER_LANG_EN)}")
-        print(f"  HE Container length: {len(word_instance.HTML_CONTAINER_LANG_HE)}")
-        
-        return word_instance
+
+        try:
+            soup = BeautifulSoup(container_html, 'html.parser')
+            page_header = soup.find('h2', class_='page-header')
+
+            if not page_header:
+                print("❌ No h2.page-header found")
+                return None
+
+            header_text = page_header.get_text().strip()
+            print(f"🔍 Header text: '{header_text}'")
+
+            words = header_text.split()
+            print(f"🔍 Split words: {words}")
+
+            # Find the first word containing Hebrew characters
+            hebrew_word = next((w for w in words if re.search(r'[\u0590-\u05FF]', w)), None)
+            print(f"🔍 Extracted word: '{hebrew_word}'")
+
+            if hebrew_word:
+                print("✅ Hebrew characters detected")
+                return hebrew_word
+            else:
+                print("❌ No Hebrew characters found in header text")
+                return None
+
+        except Exception as e:
+            print(f"❌ Error extracting Hebrew word: {e}")
+            return None
+
     
     
-    def test_multiple_entries(self, count: int = 5):
-        """Test processing multiple entries"""
-        print(f"Testing first {count} entries:")
-        print("=" * 50)
+    def extract_translation_from_lead(self, lead_html: str) -> Optional[str]:
+        """Extract translation text from lead div"""
+        if not lead_html:
+            return None
+            
+        try:
+            soup = BeautifulSoup(lead_html, 'html.parser')
+            lead_div = soup.find('div', class_='lead')
+            return lead_div.get_text(strip=True) if lead_div else None
+        except Exception as e:
+            print(f"Error extracting translation: {e}")
+            return None
+    
+    
+    def json_entry_to_word_model(self, page_index: str, entry_data: Dict) -> Optional[Word]:
+        """
+        Convert a single JSON entry to a Word model instance
         
-        processed_count = 0
+        Args:
+            page_index: The page index (JSON key)
+            entry_data: The dictionary containing language data
+            
+        Returns:
+            Word model instance or None if conversion fails
+        """
+        try:
+            # Extract HTML containers
+            ru_container = entry_data.get('ru', {}).get('container', '')
+            en_container = entry_data.get('en', {}).get('container', '')
+            he_container = entry_data.get('he', {}).get('container', '')
+            
+            # Extract translations
+            ru_translation = self.extract_translation_from_lead(
+                entry_data.get('ru', {}).get('lead', '')
+            )
+            en_translation = self.extract_translation_from_lead(
+                entry_data.get('en', {}).get('lead', '')
+            )
+            he_translation = self.extract_hebrew_word(en_container)
+            
+            # Create Word instance
+            word_instance = Word(
+                INDEX=int(page_index),
+                HTML_CONTAINER_LANG_RU=ru_container,
+                HTML_CONTAINER_LANG_EN=en_container,
+                HTML_CONTAINER_LANG_HE=he_container,
+                TRANSLATION_LANG_RU=ru_translation,
+                TRANSLATION_LANG_EN=en_translation,
+                TRANSLATION_LANG_HE=he_translation,
+                TRANSCRIBTION_LANG_RU=None,  # Will be populated later
+                TRANSCRIBTION_LANG_EN=None   # Will be populated later
+            )
+            
+            return word_instance
+            
+        except Exception as e:
+            print(f"Error converting page {page_index} to model: {e}")
+            return None
+    
+    
+    def convert_all_entries(self) -> List[Word]:
+        """Convert all JSON entries to Word model instances"""
         word_instances = []
         
-        for page_index, entry_data in list(self.json_data.items())[:count]:
-            print(f"\nProcessing page {page_index}:")
-            
-            word_instance = self.process_entry(page_index, entry_data)
-            word_instances.append(word_instance)
-            
-            print(f"  ✓ Translation: {word_instance.TRANSLATION_LANG_RU} | {word_instance.TRANSLATION_LANG_EN}")
-            print(f"  ✓ Containers: RU({len(word_instance.HTML_CONTAINER_LANG_RU)}) EN({len(word_instance.HTML_CONTAINER_LANG_EN)}) HE({len(word_instance.HTML_CONTAINER_LANG_HE)})")
-            
-            processed_count += 1
+        for page_index, entry_data in self.data.items():
+            word_instance = self.json_entry_to_word_model(page_index, entry_data)
+            if word_instance:
+                word_instances.append(word_instance)
         
-        print(f"\n✅ Successfully processed {processed_count} entries")
+        print(f"✅ Converted {len(word_instances)} entries to model instances")
         return word_instances
     
     
-    def validate_data_quality(self, sample_size: int = 10):
-        """Validate the quality of extracted data"""
-        print("Data Quality Validation:")
-        print("=" * 50)
+    def convert_and_save_to_db(self, batch_size: int = 100) -> int:
+        """
+        Convert JSON entries and save to database in batches
         
-        issues = []
-        valid_entries = 0
-        
-        for page_index, entry_data in list(self.json_data.items())[:sample_size]:
-            # Check if all languages have containers
-            has_ru = bool(entry_data.get('ru', {}).get('container'))
-            has_en = bool(entry_data.get('en', {}).get('container'))
-            has_he = bool(entry_data.get('he', {}).get('container'))
+        Args:
+            batch_size: Number of records to insert per batch
             
-            # Check if translations are extracted
-            ru_trans = self.extract_lead_content(entry_data.get('ru', {}).get('lead', ''))
-            en_trans = self.extract_lead_content(entry_data.get('en', {}).get('lead', ''))
-            he_trans = self.extract_lead_content(entry_data.get('he', {}).get('lead', ''))
+        Returns:
+            Number of successfully saved records
+        """
+        word_instances = self.convert_all_entries()
+        saved_count = 0
+        
+        for i in range(0, len(word_instances), batch_size):
+            batch = word_instances[i:i + batch_size]
             
-            if not all([has_ru, has_en, has_he]):
-                issues.append(f"Page {page_index}: Missing containers (RU:{has_ru}, EN:{has_en}, HE:{has_he})")
-            
-            if not any([ru_trans, en_trans, he_trans]):
-                issues.append(f"Page {page_index}: No translations extracted")
-            else:
-                valid_entries += 1
+            try:
+                DATABASE.session.bulk_save_objects(batch)
+                DATABASE.session.commit()
+                saved_count += len(batch)
+                print(f"✅ Saved batch {i//batch_size + 1}: {len(batch)} records")
+                
+            except Exception as e:
+                DATABASE.session.rollback()
+                print(f"❌ Error saving batch {i//batch_size + 1}: {e}")
+                # Try saving individually
+                for word in batch:
+                    try:
+                        DATABASE.session.add(word)
+                        DATABASE.session.commit()
+                        saved_count += 1
+                    except:
+                        DATABASE.session.rollback()
         
-        print(f"Valid entries: {valid_entries}/{sample_size}")
-        print(f"Issues found: {len(issues)}")
-        
-        for issue in issues[:5]:  # Show first 5 issues
-            print(f"  ⚠️ {issue}")
-        
-        return valid_entries, issues
+        print(f"🎉 Total saved to database: {saved_count} records")
+        return saved_count
 
 
-def main():
-    """Main test function"""
-    # Initialize processor
-    processor = Processor()
+# 🎯 Simple Function-Based Approach
+def json_to_word_models_simple(json_filepath: str) -> List[Word]:
+    """
+    Simple one-shot conversion from JSON to Word models
     
-    print("JSON to Model Conversion Test")
-    print("=" * 60)
+    Args:
+        json_filepath: Path to JSON file
+        
+    Returns:
+        List of Word model instances
+    """
+    converter = JSONToWordModelConverter(json_filepath)
+    return converter.convert_all_entries()
+
+
+def save_words_to_db(word_instances: List[Word]) -> int:
+    """
+    Save Word instances to database
     
-    # Check if data is loaded
-    if not processor.json_data:
-        print("❌ No data loaded. Check JSON file path.")
-        return
+    Args:
+        word_instances: List of Word model instances
+        
+    Returns:
+        Number of successfully saved records
+    """
+    try:
+        DATABASE.session.bulk_save_objects(word_instances)
+        DATABASE.session.commit()
+        print(f"✅ Saved {len(word_instances)} records to database")
+        return len(word_instances)
+    except Exception as e:
+        DATABASE.session.rollback()
+        print(f"❌ Error saving to database: {e}")
+        return 0
+
+
+# 🧪 Test Functions
+def test_conversion(json_filepath: str, test_count: int = 3):
+    """Test the conversion process with sample data"""
+    converter = JSONToWordModelConverter(json_filepath)
     
-    print(f"✅ Loaded {len(processor.json_data)} entries from JSON")
+    print("🧪 Testing JSON to Model Conversion")
+    print("=" * 50)
     
     # Test single entry
-    print("\n1. Testing single entry processing:")
-    word_instance = processor.test_single_entry("1")
+    test_entries = list(converter.data.items())[:test_count]
     
-    # Test multiple entries
-    print("\n2. Testing multiple entries processing:")
-    word_instances = processor.test_multiple_entries(5)
-    
-    # Validate data quality
-    print("\n3. Data quality validation:")
-    processor.validate_data_quality(10)
-    
-    # Test database insertion (optional)
-    print("\n4. Testing database insertion:")
-    try:
-        # Add to database session (but don't commit for test)
+    for page_index, entry_data in test_entries:
+        print(f"\n📄 Testing page {page_index}:")
+        
+        # Debug: Check what languages we have
+        print(f"  📊 Available languages: {list(entry_data.keys())}")
+        
+        # Debug: Check Hebrew container
+        he_container = entry_data.get('he', {}).get('container', '')
+        print(f"  📊 HE container length: {len(he_container)}")
+        
+        if he_container:
+            # Test Hebrew extraction directly
+            hebrew_word = converter.extract_hebrew_word(he_container)
+            print(f"  🔍 Direct Hebrew extraction: '{hebrew_word}'")
+        
+        word_instance = converter.json_entry_to_word_model(page_index, entry_data)
         if word_instance:
-            DATABASE.session.add(word_instance)
-            print("✅ Word instance ready for database insertion")
-            # DATABASE.session.commit()  # Uncomment to actually save
+            print(f"  ✅ INDEX: {word_instance.INDEX}")
+            print(f"  ✅ RU: '{word_instance.TRANSLATION_LANG_RU}'")
+            print(f"  ✅ EN: '{word_instance.TRANSLATION_LANG_EN}'")
+            print(f"  ✅ HE: '{word_instance.TRANSLATION_LANG_HE}'")
+            print(f"  ✅ Containers: "
+                  f"RU({len(word_instance.HTML_CONTAINER_LANG_RU)}) "
+                  f"EN({len(word_instance.HTML_CONTAINER_LANG_EN)}) "
+                  f"HE({len(word_instance.HTML_CONTAINER_LANG_HE)})")
         else:
-            print("❌ No word instance to insert")
-    except Exception as e:
-        print(f"❌ Database error: {e}")
+            print(f"  ❌ Failed to convert page {page_index}")
 
 
-if __name__ == "__main__":
-    main()
+def quick_convert_and_save(json_filepath: str):
+    """Quick one-liner to convert and save all data"""
+    word_instances = json_to_word_models_simple(json_filepath)
+    save_words_to_db(word_instances)
+
+
+# 🚀 Main Execution
+def check():
+    JSON_FILE = SETTINGS.JSON_COLLECTION_FILEPATH
+    
+    # Test first
+    test_conversion(JSON_FILE, 3)
+    
+    # Full conversion
+    converter = JSONToWordModelConverter(JSON_FILE)
+    converter.convert_and_save_to_db()
+    
