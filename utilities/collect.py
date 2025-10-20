@@ -340,7 +340,7 @@ async def __collect_dictionary():
     """
     
     # Default task values:
-    PAELIM_PAGE_MAX: int = 100
+    PAELIM_PAGE_MAX: int = 10000
     PAELIM_PAGE_BATCH: int = 10
     
     # Calling Scrapper and continuing (if task exists)
