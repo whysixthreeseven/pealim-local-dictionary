@@ -184,4 +184,3 @@ cython_debug/
 .log
 
 # Dictionary collections (large files):
-dict_*
