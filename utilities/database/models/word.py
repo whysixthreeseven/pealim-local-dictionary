@@ -39,9 +39,11 @@ class Word(DATABASE.Model):
     INDEX = Column(Integer, nullable = False, unique = True)
     
     # Word translated to different languages:
-    LANG_RU = Column(String, nullable = True)
-    LANG_EN = Column(String, nullable = True)
-    LANG_HE = Column(String, nullable = True)
+    TRANSLATION_LANG_HE = Column(String, nullable = True)
+    TRANSLATION_LANG_RU = Column(String, nullable = True)
+    TRANSLATION_LANG_EN = Column(String, nullable = True)
+    TRANSCRIBTION_LANG_RU = Column(String, nullable = True)
+    TRANSCRIBTION_LANG_EN = Column(String, nullable = True)
     
     # Table injection attributes:
     HTML_CONTAINER_LANG_RU = Column(String, nullable = True)
@@ -152,4 +154,34 @@ class Word(DATABASE.Model):
         return page_url
     
     
+    """
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    COMPOSITION METHODS
+    
+    """
+
+
+    def __compose_translation(self) -> None:
+        """
+        TODO: Create a docstring.
+        """
+
+        ...
+
+    
+    def __compose_transcribtion(self) -> None:
+        """
+        TODO: Create a docstring.
+        """
+
+        ...
+
+    
+    def compose(self) -> None:
+        """
+        TODO: Create a docstring.
+        """
+
+        ...
+
     
