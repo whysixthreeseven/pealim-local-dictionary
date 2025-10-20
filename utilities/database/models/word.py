@@ -38,7 +38,7 @@ class Word(DATABASE.Model):
     ID = Column(Integer, primary_key = True, nullable = False, unique = True, autoincrement = True)
     INDEX = Column(Integer, nullable = False, unique = True)
     
-    # Word translated to different languages:
+    # Translation and transcribtion attributes::
     TRANSLATION_LANG_HE = Column(String, nullable = True)
     TRANSLATION_LANG_RU = Column(String, nullable = True)
     TRANSLATION_LANG_EN = Column(String, nullable = True)
@@ -46,9 +46,9 @@ class Word(DATABASE.Model):
     TRANSCRIBTION_LANG_EN = Column(String, nullable = True)
     
     # Table injection attributes:
-    HTML_CONTAINER_LANG_RU = Column(String, nullable = True)
-    HTML_CONTAINER_LANG_EN = Column(String, nullable = True)
-    HTML_CONTAINER_LANG_HE = Column(String, nullable = True)
+    HTML_CONTAINER_LANG_RU = Column(String, nullable = False)
+    HTML_CONTAINER_LANG_EN = Column(String, nullable = False)
+    HTML_CONTAINER_LANG_HE = Column(String, nullable = False)
     
     
     """
