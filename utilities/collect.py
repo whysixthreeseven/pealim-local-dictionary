@@ -80,7 +80,7 @@ class Scraper:
                 soup = BeautifulSoup(html_document, 'html.parser')
                 lead_div = soup.find('div', class_='lead')
                 lead_content = str(lead_div) if lead_div else None
-                container_div = soup.find('div', class_='container')
+                container_div = soup.select_one('body > div > div.container')
                 container_content = str(container_div) if container_div else None
                 
                 # Returning data, if found both:
@@ -204,7 +204,7 @@ class Scraper:
             ) as session:
             
             # Filtering out pages that are already in results
-            page_index_all = list(range(6211, self.paelim_page_count + 1))
+            page_index_all = list(range(1, self.paelim_page_count + 1))
             page_index_remaining: list[int] = [
                 page_index for page_index
                 in page_index_all
@@ -340,7 +340,7 @@ async def __collect_dictionary():
     """
     
     # Default task values:
-    PAELIM_PAGE_MAX: int = 10000
+    PAELIM_PAGE_MAX: int = 100
     PAELIM_PAGE_BATCH: int = 10
     
     # Calling Scrapper and continuing (if task exists)
