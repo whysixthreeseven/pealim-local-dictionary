@@ -1,7 +1,5 @@
 # Default logger import:
 import logging
-
-from utilities import verification
 log = logging.getLogger(__name__)
 
 # Database types:

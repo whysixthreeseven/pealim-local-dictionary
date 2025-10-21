@@ -3,10 +3,70 @@
 {% block stylesheet %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/database.css') }}">
 {% endblock stylesheet %}
 
 {% block navigation %}
     {% include "components/navigation.html" %}
 {% endblock navigation %}
 
-Database
+{% block content %}
+
+    <!-- Database Status Panel -->
+    <div class="status-panel">
+
+        <!-- Header -->
+        <div class="status-header">
+            <h2 class="status-title">Data Status</h2>
+        </div>
+        
+        <!-- Status Cards Container -->
+        <div class="status-cards">
+
+            <!-- JSON Data Card -->
+            <div class="status-card status-{{ json_status|lower }}">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='images/file-json.png') }}" alt="JSON Data" class="status-icon">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">JSON Data</h3>
+                    <div class="status-indicator">
+                        <span class="status-text">{{ json_status }}</span>
+                        <span class="status-dot"></span>
+                    </div>
+                    <div class="entry-count count-{% if json_count > 0 %}ready{% else %}error{% endif %}">
+                        {{ json_count }} entries
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Database Card -->
+            <div class="status-card status-{{ database_status|lower }}">
+                <div class="card-image">
+                    <img src="{{ url_for('static', filename='images/file-db.png') }}" alt="Database" class="status-icon">
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Database</h3>
+                    <div class="status-indicator">
+                        <span class="status-text">{{ database_status }}</span>
+                        <span class="status-dot"></span>
+                    </div>
+                    <div class="entry-count count-{% if database_count > 0 %}ready{% else %}error{% endif %}">
+                        {{ database_count }} entries
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Check Button -->
+        <div class="status-actions">
+            <form method="POST" action="{{ url_for('database.database') }}">
+                <button type="submit" class="check-button" name="check_data">
+                    <span class="button-icon">↻</span>
+                    <span class="button-text">Check Data</span>
+                </button>
+            </form>
+        </div>
+        
+    </div>
+{% endblock content %}

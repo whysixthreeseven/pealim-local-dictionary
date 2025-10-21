@@ -52,6 +52,7 @@ from utilities.namespace import (
     SQLALCHEMY_TRACK_MODIFICATIONS, 
     )
 
+
 # Creating Flask application:
 application = Flask(
     import_name     = SETTINGS.APP_NAME,
@@ -103,22 +104,7 @@ with application.app_context():
     DATABASE.create_all()
     log.info("Database tables created")
 
-
-"""
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-DEBUG, MANUAL COMMANDS AND INJECTIONS BLOCK
-
-"""
-
-
-# Importing session class instance:
-from session import SESSION
-
-
-# Manual verifications:
-with application.app_context():
-    SESSION.verify_data()
-    
+   
     
 """
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -131,6 +117,7 @@ REGISTERING BLUEPRINTS
 from routes.home import HOME_BLUEPRINT
 from routes.dictionary import DICTIONARY_BLUEPRINT
 from routes.database import DATABASE_BLUEPRINT
+from routes.search import SEARCH_BLUEPRINT
 from routes.selected import SELECTED_BLUEPRINT
 
 
@@ -138,6 +125,7 @@ from routes.selected import SELECTED_BLUEPRINT
 application.register_blueprint(blueprint = HOME_BLUEPRINT)
 application.register_blueprint(blueprint = DICTIONARY_BLUEPRINT)
 application.register_blueprint(blueprint = DATABASE_BLUEPRINT)
+application.register_blueprint(blueprint = SEARCH_BLUEPRINT)
 application.register_blueprint(blueprint = SELECTED_BLUEPRINT)
 
 # Logging:

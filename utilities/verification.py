@@ -2,6 +2,9 @@
 import logging
 log = logging.getLogger(__name__)
 
+# Flask session import:
+from flask import session
+
 # System-management library:
 import os
 
@@ -10,7 +13,6 @@ import json
 
 # Local settings and session import:
 from configuration import SETTINGS
-from session import SESSION
 
 # Database-related import:
 from utilities.database import DATABASE
@@ -24,7 +26,7 @@ FILE VERIFICATION FUNCTIONS
 """
 
 
-def verify_json_data_attached() -> bool:
+def __verify_json_data_attached() -> bool:
     """
     TODO: Create a docstring.
     """
@@ -41,7 +43,7 @@ def verify_json_data_attached() -> bool:
     return json_data_exists
 
 
-def verify_database_attached() -> bool:
+def __verify_database_attached() -> bool:
     """
     TODO: Create a docstring.
     """
@@ -58,7 +60,7 @@ def verify_database_attached() -> bool:
     return database_exists
 
 
-def calc_database_entry_count() -> int:
+def __calc_database_entry_count() -> int:
     """
     Count the number of Word entries in the database. Performs a database query to count all Word 
     model instances in the words table. This provides the current state of the database for 
@@ -83,7 +85,7 @@ def calc_database_entry_count() -> int:
         return 0
     
 
-def calc_json_data_entry_count(json_filepath: str = None) -> int:
+def __calc_json_data_entry_count(json_filepath: str = None) -> int:
     """
     Count the number of entries in the JSON dictionary data file.
     
@@ -125,3 +127,93 @@ def calc_json_data_entry_count(json_filepath: str = None) -> int:
         log.error(f"Unexpected error reading JSON file: {exception_error}")
         return 0
 
+
+def verify_data() -> None:
+    """
+    Perform data verification and store results in Flask session.
+    
+    This function checks the availability and entry counts of both JSON data and database, then 
+    stores the results in the Flask session for persistence across requests.
+    """
+    
+    # Logging:
+    log.info("Starting data verification process...")
+
+    # Verification start:
+    try:
+
+        # Verifying JSON data:
+        json_attached = __verify_json_data_attached()
+        session['JSON_DATA_ATTACHED'] = json_attached
+        if json_attached: 
+            session['JSON_DATA_COUNT'] = __calc_json_data_entry_count()
+        else:
+            session['JSON_DATA_COUNT'] = 0
+        
+        # Verifying database entries:
+        db_attached = __verify_database_attached()
+        session['DATABASE_ATTACHED'] = db_attached
+        if db_attached: 
+            session['DATABASE_ENTRY_COUNT'] = __calc_database_entry_count()
+        else:
+            session['DATABASE_ENTRY_COUNT'] = 0
+
+    # Handling exception/error:
+    except Exception as e:
+        log.error(f"Verification failed: {e}")
+
+        # Seting default values on error:
+        session['JSON_DATA_ATTACHED'] = False
+        session['JSON_DATA_COUNT'] = 0
+        session['DATABASE_ATTACHED'] = False
+        session['DATABASE_ENTRY_COUNT'] = 0
+
+
+def status_json() -> str:
+    """
+    Determine the status of JSON data based on verification results.
+    
+    :return str: Status: `'Ready'`, `'Async'`, or `'Missing'`
+    """
+
+    # Use get() with defaults to avoid KeyError
+    json_attached = session.get('JSON_DATA_ATTACHED', False)
+    json_data_count = session.get('JSON_DATA_COUNT', 0)
+    database_entry_count = session.get('DATABASE_ENTRY_COUNT', 0)
+    
+    # Generating status:
+    status = "Missing"
+    if json_attached:
+        if json_data_count > 0:
+            if json_data_count == database_entry_count:
+                status = "Ready"
+            else:
+                status = "Async"
+    
+    # Returning:
+    return status
+
+
+def status_database() -> str:
+    """
+    Determine the status of database based on verification results.
+    
+    :return str: Status: `'Ready'`, `'Async'`, or `'Missing'`
+    """
+
+    # Using get() with defaults to avoid KeyError:
+    database_attached = session.get('DATABASE_ATTACHED', False)
+    database_entry_count = session.get('DATABASE_ENTRY_COUNT', 0)
+    json_data_count = session.get('JSON_DATA_COUNT', 0)
+    
+    # Generating status:
+    status = "Missing"
+    if database_attached:
+        if database_entry_count > 0:
+            if json_data_count == database_entry_count:
+                status = "Ready"
+            else:
+                status = "Async"
+    
+    # Returnign:
+    return status
