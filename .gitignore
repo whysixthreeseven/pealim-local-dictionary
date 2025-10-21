@@ -185,3 +185,4 @@ cython_debug/
 
 # Large files:
 dict_*
+common.db
