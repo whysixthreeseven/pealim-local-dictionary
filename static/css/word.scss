@@ -1,0 +1,376 @@
+// Import your existing variables
+$color-bg: #f9fafc;
+$color-text: #1a202c;
+$color-muted: #4a5568;
+$color-accent: #00b4d8;
+$color-highlight: #ffe066;
+$font-mono: monospace;
+
+// Word Container
+.word-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    font-family: $font-mono;
+}
+
+// Word Header
+.word-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 2px solid rgba(0, 0, 0, 0.08);
+    
+    .word-title {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: $color-text;
+        margin: 0 0 1rem 0;
+        
+        // Special styling for Hebrew text
+        &:lang(he) {
+            font-family: 'Arial Hebrew', 'Times New Roman', serif;
+            direction: rtl;
+        }
+    }
+    
+    .word-subtitle {
+        font-size: 1.25rem;
+        color: $color-muted;
+        margin: 0 0 2rem 0;
+        font-weight: 500;
+    }
+}
+
+// Language Navigation
+.language-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+    
+    .language-label {
+        font-size: 0.9rem;
+        color: $color-muted;
+        font-weight: 500;
+    }
+    
+    .language-buttons {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+    }
+    
+    .language-btn {
+        padding: 0.5rem 1rem;
+        background: white;
+        color: $color-muted;
+        text-decoration: none;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        
+        &:hover {
+            background: $color-accent;
+            color: white;
+            border-color: $color-accent;
+            transform: translateY(-1px);
+        }
+        
+        &.active {
+            background: $color-highlight;
+            color: $color-text;
+            border-color: $color-highlight;
+            font-weight: 600;
+        }
+    }
+}
+
+// Word Content Container
+.word-content-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.word-content {
+    padding: 2rem;
+    
+    // Style the imported HTML content to match your theme
+    
+    :last-child {
+        margin-bottom: 0;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        color: $color-text;
+        margin: 1.5rem 0 1rem 0;
+    }
+    
+    h2 {
+        font-size: 1.5rem;
+        border-bottom: 2px solid $color-highlight;
+        padding-bottom: 0.5rem;
+    }
+    
+    h3 {
+        font-size: 1.25rem;
+        color: $color-accent;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 1rem 0;
+        
+        th, td {
+            padding: 0.75rem;
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+        
+        th {
+            background: $color-bg;
+            font-weight: 600;
+            color: $color-text;
+        }
+        
+        tr:nth-child(even) {
+            background: lighten($color-bg, 2%);
+        }
+    }
+    
+    .menukad {
+        font-family: 'Arial Hebrew', 'Times New Roman', serif;
+        font-size: 1.1em;
+        color: $color-text;
+    }
+    
+    .transcription {
+        color: $color-muted;
+        font-style: italic;
+    }
+    
+    .meaning {
+        color: $color-text;
+        font-weight: 500;
+    }
+}
+
+.section.h3 {
+    margin-top: 24px 0px 16px;
+}
+
+// Word Footer
+.word-footer {
+    border-top: 2px solid rgba(0, 0, 0, 0.08);
+    padding-top: 2rem;
+    
+    .word-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 1rem;
+    }
+    
+    .back-to-dict {
+        padding: 0.75rem 1.5rem;
+        background: $color-accent;
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        
+        &:hover {
+            background: darken($color-accent, 10%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 180, 216, 0.3);
+        }
+    }
+    
+    .word-index-info {
+        font-size: 0.9rem;
+        color: $color-muted;
+        font-weight: 500;
+        background: $color-bg;
+        padding: 0.5rem 1rem;
+        border-radius: 4px;
+    }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .word-container {
+        padding: 0 1rem;
+        margin: 1rem auto;
+    }
+    
+    .word-title {
+        font-size: 2rem !important;
+    }
+    
+    .word-subtitle {
+        font-size: 1.1rem !important;
+    }
+    
+    .language-nav {
+        flex-direction: column;
+        gap: 0.75rem;
+    }
+    
+    .word-content {
+        padding: 1.5rem;
+    }
+    
+    .word-nav {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .word-title {
+        font-size: 1.75rem !important;
+    }
+    
+    .word-content {
+        padding: 1rem;
+    }
+    
+    .language-buttons {
+        flex-direction: column;
+        width: 100%;
+        
+        .language-btn {
+            text-align: center;
+        }
+    }
+}
+
+// Floating Back Button
+.floating-back-btn {
+    position: fixed;
+    bottom: 2rem;
+    left: 2rem;
+    width: 50px;
+    height: 50px;
+    background: $color-accent;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(0, 180, 216, 0.4);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    
+    &:hover {
+        background: darken($color-accent, 15%);
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 180, 216, 0.6);
+    }
+    
+    &:active {
+        transform: translateY(0) scale(0.98);
+    }
+    
+    // Optional pulse animation to attract attention
+    animation: float-pulse 3s ease-in-out infinite;
+    
+    @keyframes float-pulse {
+        0%, 100% {
+            transform: translateY(0);
+        }
+        50% {
+            transform: translateY(-5px);
+        }
+    }
+}
+
+// Alternative minimal style (if you prefer)
+.floating-back-btn.minimal {
+    background: rgba(255, 255, 255, 0.9);
+    color: $color-text;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    
+    &:hover {
+        background: white;
+        color: $color-accent;
+    }
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+    .floating-back-btn {
+        bottom: 1.5rem;
+        left: 1.5rem;
+        width: 45px;
+        height: 45px;
+    }
+}
+
+@media (max-width: 480px) {
+    .floating-back-btn {
+        bottom: 1rem;
+        left: 1rem;
+        width: 40px;
+        height: 40px;
+        
+        svg {
+            width: 18px;
+            height: 18px;
+        }
+    }
+}
+
+// Optional: Hide on scroll down, show on scroll up
+.floating-back-btn.hidden {
+    transform: translateX(-100px);
+    opacity: 0;
+}
+
+// Hide unwanted elements from the imported HTML
+.word-content {
+    
+    // Hide the popover note
+    .popovers-note,
+    .small[style*="font-style: italic"],
+    em.small {
+        display: none !important;
+    }
+    
+    // Hide collapse/expand controls
+    [data-toggle="collapse"],
+    [data-target*="collapse"] {
+        display: none !important;
+    }
+    
+    // Hide any button with "Show" text
+    button:contains("Show"),
+    .btn:contains("Show") {
+        display: none !important;
+    }
+
+    .visible-print-inline {
+        display: none !important;
+    }
+
+    .row.source-media {
+        display: none !important;
+    }
+    
+    
+}
+

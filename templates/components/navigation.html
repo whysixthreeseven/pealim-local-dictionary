@@ -12,16 +12,58 @@
             Database
         </a>
         <a href="/dictionary"
-           class="nav-btn {% if request.path == '/dictionary' %}active{% endif %}">
+           class="nav-btn {% if request.path.startswith('/dictionary') %}active{% endif %}">
             Dictionary
-        </a>
-        <a href="/search"
-           class="nav-btn {% if request.path == '/search' %}active{% endif %}">
-            Search
         </a>
         <a href="/selected"
            class="nav-btn {% if request.path == '/selected' %}active{% endif %}">
             Selected
         </a>
+
+        <!-- Search Bar -->
+        <div class="nav-search">
+            <div class="search-container">
+                <input 
+                    type="text" 
+                    class="search-input" 
+                    placeholder="Search..."
+                    aria-label="Search dictionary"
+                >
+                <button class="search-btn" aria-label="Search">
+                    <span class="search-icon">››</span>
+                </button>
+            </div>
+        </div>
     </div>
 </nav>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const searchInput = document.querySelector('.search-input');
+        const searchBtn = document.querySelector('.search-btn');
+        
+        function handleSearch() {
+            const query = searchInput.value.trim();
+            if (query) {
+                // For now, just log the search query
+                console.log('Searching for:', query);
+                // Later you can redirect to search results:
+                // window.location.href = `/search?q=${encodeURIComponent(query)}`;
+            }
+        }
+        
+        // Search on button click
+        if (searchBtn) {
+            searchBtn.addEventListener('click', handleSearch);
+        }
+        
+        // Search on Enter key
+        if (searchInput) {
+            searchInput.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    handleSearch();
+                }
+            });
+        }
+    });
+</script>

@@ -51,6 +51,20 @@ class Word(DATABASE.Model):
     # SEARCH_LANG_HE = Column(JSON, nullable = True)
     # SEARCH_LANG_RU = Column(JSON, nullable = True)
     # SEARCH_LANG_EN = Column(JSON, nullable = True)
+
+
+    """
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    TEST & DEBUG PROPERTIES
+    
+    """
+
+    
+    @property
+    def STATUS_SAVED(self) -> bool:
+        import random
+        return random.choice((True, False))
+
     
     
     """

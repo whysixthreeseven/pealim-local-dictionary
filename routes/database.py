@@ -12,9 +12,9 @@ from typing import Any
 # Settings import:
 from configuration import SETTINGS
 
-# Utilities import:
-from utilities import verification
-
+# Database and related import:
+from utilities.database import DATABASE
+from utilities import convert, verification
 
 
 
@@ -50,10 +50,51 @@ def database() -> str:
     Handle database status page with data verification.
     """
 
-    # Handling POST request (Check Data button clicked):
-    if request.method == "POST" and "check_data" in request.form:
-        log.info("Check Data requested - running verification...")
-        verification.verify_data()
+    # Default values:
+    rebuild_success: bool = False
+    rebuild_entry_count: int = 0
+
+    # POST request handling:
+    if request.method == "POST":
+
+        # Data verification:
+        if "check_data" in request.form:
+            log.info("Check Data requested - running verification...")
+            verification.verify_data()
+
+        # Data rebuilding:
+        elif "rebuild_database" in request.form:
+                log.info("Rebuild Database button clicked - starting rebuild process...")
+                
+
+
+                # Attempting to rebuild:
+                try:
+
+                    # Delete all entries from words table
+                    from utilities.database.models.word import Word
+                    deleted_count = Word.query.delete()
+                    DATABASE.session.commit()
+                    log.info(f"Deleted {deleted_count} entries from database")
+                    
+                    # Rebuild from JSON
+                    converter = convert.Converter(
+                         json_filepath = SETTINGS.JSON_COLLECTION_FILEPATH
+                         )
+                    rebuild_entry_count = converter.run()  # This should return the number of entries added
+                    
+                    # Update verification data:
+                    verification.verify_data()
+                    rebuild_success = True
+
+                    # Logging:
+                    log.info(f"Database rebuilt successfully with {rebuild_entry_count} entries")
+                    
+                # Handling exceptions and rolling back:
+                except Exception as exception_error:
+                    DATABASE.session.rollback()
+                    rebuild_success = False
+                    log.error(f"Database rebuild failed: {exception_error}")
     
     # Preparing template context from session data:
     context: dict[str, Any] = {
@@ -61,6 +102,8 @@ def database() -> str:
         'json_count': session.get('JSON_DATA_COUNT', 0),
         'database_status': verification.status_database(),
         'database_count': session.get('DATABASE_ENTRY_COUNT', 0),
+        'rebuild_success': rebuild_success,
+        'rebuild_count': rebuild_entry_count
         }
 
     # Generating page routing:
@@ -71,4 +114,3 @@ def database() -> str:
     
     # Getting route page rendered WITH CONTEXT:
     return page_route
-

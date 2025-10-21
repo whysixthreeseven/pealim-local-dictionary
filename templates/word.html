@@ -1,0 +1,96 @@
+{% extends "components/layout.html" %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/word.css') }}">
+{% endblock stylesheet %}
+
+{% block navigation %}
+    {% include "components/navigation.html" %}
+{% endblock navigation %}
+
+{% block content %}
+    <div class="word-container">
+        
+        <!-- Word Header -->
+        <div class="word-header">
+            <h1 class="word-title">
+                {% if hebrew_word %}
+                    {{ hebrew_word }}
+                {% else %}
+                    WORD
+                {% endif %}
+            </h1>
+            
+            {% if translation %}
+            <p class="word-subtitle">{{ translation }}</p>
+            {% endif %}
+            
+            <!-- Language Navigation -->
+            <div class="language-nav">
+                <div class="language-buttons">
+                    <a href="{{ url_for('word.word_detail', language='ru', word_index=word.INDEX) }}" 
+                       class="language-btn {% if language == 'ru' %}active{% endif %}">
+                        Русский
+                    </a>
+                    <a href="{{ url_for('word.word_detail', language='en', word_index=word.INDEX) }}" 
+                       class="language-btn {% if language == 'en' %}active{% endif %}">
+                        English
+                    </a>
+                    <a href="{{ url_for('word.word_detail', language='he', word_index=word.INDEX) }}" 
+                       class="language-btn {% if language == 'he' %}active{% endif %}">
+                        עברית
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Word Content Container -->
+        <div class="word-content-container">
+            <div class="word-content">
+                {{ container_html|safe }}
+            </div>
+        </div>
+
+        <!-- Navigation Footer -->
+        <div class="word-footer">
+            <div class="word-nav">
+                
+                <div class="word-index-info">
+                    Local Index: {{ word.ID }}
+                </div>
+
+                <div class="word-index-info">
+                    Paelim Index: {{ word.INDEX }}
+                </div>
+            </div>
+        </div>
+
+        <!-- Floating Back Button -->
+        <button class="floating-back-btn" onclick="goBack()" title="Go back to previous page">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 12H5M12 19l-7-7 7-7"/>
+            </svg>
+        </button>
+
+    </div>
+
+    <script>
+        function goBack() {
+            if (document.referrer && document.referrer.includes(window.location.hostname)) {
+                window.history.back();
+            } else {
+                // Fallback to dictionary if no previous page in our site
+                window.location.href = "{{ url_for('dictionary.dictionary') }}";
+            }
+        }
+
+        // Optional: Add keyboard shortcut (Esc key)
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                goBack();
+            }
+        });
+    </script>
+{% endblock content %}

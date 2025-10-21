@@ -57,13 +57,24 @@
                 </div>
             </div>
         </div>
-        
-        <!-- Check Button -->
+
+        <!-- Buttons -->
         <div class="status-actions">
+
+            <!-- Check Button -->
             <form method="POST" action="{{ url_for('database.database') }}">
                 <button type="submit" class="check-button" name="check_data">
                     <span class="button-icon">↻</span>
-                    <span class="button-text">Check Data</span>
+                    <span class="button-text">Refresh</span>
+                </button>
+            </form>
+
+            <!-- Rebuild Button -->
+            <form method="POST" action="{{ url_for('database.database') }}" class="action-form" 
+                  onsubmit="return confirm('This will DELETE ALL database entries and rebuild from JSON. Continue?');">
+                <button type="submit" class="rebuild-button" name="rebuild_database">
+                    <span class="button-icon">⏎</span>
+                    <span class="button-text">Rebuild</span>
                 </button>
             </form>
         </div>

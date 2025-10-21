@@ -26,6 +26,10 @@
                     <tr>
                         <th class="column-id">ID</th>
                         <th class="column-index">Index</th>
+                        <th class="column-languages">Languages</th>
+                        <th class="column-translation-he">Hebrew</th>
+                        <th class="column-translation-en">English</th>
+                        <th class="column-translation-ru">Russian</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -33,10 +37,32 @@
                     <tr class="word-row">
                         <td class="cell-id">{{ word.ID }}</td>
                         <td class="cell-index">{{ word.INDEX }}</td>
+                        <td class="cell-languages">
+                            <div class="language-buttons">
+                                <a href="{{ url_for('word.word_detail', language='ru', word_index=word.INDEX) }}" 
+                                   class="lang-btn lang-ru" 
+                                   title="View in Russian">
+                                    RU
+                                </a>
+                                <a href="{{ url_for('word.word_detail', language='en', word_index=word.INDEX) }}" 
+                                   class="lang-btn lang-en" 
+                                   title="View in English">
+                                    EN
+                                </a>
+                                <a href="{{ url_for('word.word_detail', language='he', word_index=word.INDEX) }}" 
+                                   class="lang-btn lang-he" 
+                                   title="View in Hebrew">
+                                    HE
+                                </a>
+                            </div>
+                        </td>
+                        <td class="cell-translation-he">{{ word.TRANSLATION_LANG_HE }}</td>
+                        <td class="cell-translation-en">{{ word.TRANSLATION_LANG_EN }}</td>
+                        <td class="cell-translation-ru">{{ word.TRANSLATION_LANG_RU }}</td>
                     </tr>
                     {% else %}
                     <tr>
-                        <td colspan="2" class="no-words">No words found</td>
+                        <td colspan="3" class="no-words">No words found</td>
                     </tr>
                     {% endfor %}
                 </tbody>

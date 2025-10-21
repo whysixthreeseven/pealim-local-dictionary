@@ -119,6 +119,7 @@ from routes.dictionary import DICTIONARY_BLUEPRINT
 from routes.database import DATABASE_BLUEPRINT
 from routes.search import SEARCH_BLUEPRINT
 from routes.selected import SELECTED_BLUEPRINT
+from routes.word import WORD_BLUEPRINT
 
 
 # Registering blueprints:
@@ -127,6 +128,7 @@ application.register_blueprint(blueprint = DICTIONARY_BLUEPRINT)
 application.register_blueprint(blueprint = DATABASE_BLUEPRINT)
 application.register_blueprint(blueprint = SEARCH_BLUEPRINT)
 application.register_blueprint(blueprint = SELECTED_BLUEPRINT)
+application.register_blueprint(blueprint = WORD_BLUEPRINT)
 
 # Logging:
 log.info("Routing blueprints registered")
