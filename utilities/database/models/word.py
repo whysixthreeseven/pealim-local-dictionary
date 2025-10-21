@@ -45,12 +45,12 @@ class Word(DATABASE.Model):
     TRANSLATION_LANG_HE = Column(String, nullable = True)
     TRANSLATION_LANG_RU = Column(String, nullable = True)
     TRANSLATION_LANG_EN = Column(String, nullable = True)
-    TRANSCRIBTION_LANG_HE = Column(String, nullable = True)
+    # TRANSCRIBTION_LANG_HE = Column(String, nullable = True)
     TRANSCRIBTION_LANG_RU = Column(String, nullable = True)
     TRANSCRIBTION_LANG_EN = Column(String, nullable = True)
-    SEARCH_LANG_HE = Column(JSON, nullable = True)
-    SEARCH_LANG_RU = Column(JSON, nullable = True)
-    SEARCH_LANG_EN = Column(JSON, nullable = True)
+    # SEARCH_LANG_HE = Column(JSON, nullable = True)
+    # SEARCH_LANG_RU = Column(JSON, nullable = True)
+    # SEARCH_LANG_EN = Column(JSON, nullable = True)
     
     
     """

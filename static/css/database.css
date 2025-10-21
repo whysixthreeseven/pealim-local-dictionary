@@ -2,11 +2,7 @@
   width: 100%;
   max-width: 600px;
   margin: 2rem auto;
-  padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  padding: 0;
   font-family: monospace;
 }
 
@@ -15,7 +11,7 @@
   margin-bottom: 2rem;
 }
 .status-header .status-title {
-  font-size: 1.5rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #1a202c;
   margin: 0;
@@ -195,7 +191,7 @@
 @media (max-width: 768px) {
   .status-panel {
     margin: 1rem;
-    padding: 1.5rem;
+    padding: 0;
   }
   .status-cards {
     grid-template-columns: 1fr;
@@ -216,5 +212,104 @@
   }
   .status-indicator {
     justify-content: center;
+  }
+}
+.page-jump-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.page-jump-input {
+  width: 70px;
+  padding: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  text-align: center;
+  background: white;
+  transition: all 0.2s ease;
+  /* Firefox */
+  -moz-appearance: textfield;
+  /* Standard property last */
+  -webkit-appearance: textfield;
+          appearance: textfield;
+}
+.page-jump-input:focus {
+  outline: none;
+  border-color: #00b4d8;
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.1);
+}
+.page-jump-input::-moz-placeholder {
+  color: #4a5568;
+  opacity: 0.7;
+}
+.page-jump-input::placeholder {
+  color: #4a5568;
+  opacity: 0.7;
+}
+.page-jump-input::-webkit-outer-spin-button, .page-jump-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.page-jump-btn {
+  padding: 0.5rem 0.75rem;
+  background: #00b4d8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
+.page-jump-btn:hover {
+  background: rgb(0, 137.5, 165);
+  transform: translateY(-1px);
+}
+.page-jump-btn:active {
+  transform: translateY(0);
+}
+
+.button-reset {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background: none;
+  border: none;
+  padding: 0;
+  margin: 0;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.select-styled {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+@media (max-width: 768px) {
+  .page-jump-container {
+    order: 1;
+    width: 100%;
+    justify-content: center;
+    margin: 0.5rem 0;
+  }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }/*# sourceMappingURL=database.css.map */

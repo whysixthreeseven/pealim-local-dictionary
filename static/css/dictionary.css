@@ -1,0 +1,256 @@
+.dictionary-container {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 2rem;
+  font-family: monospace;
+}
+
+.dictionary-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.dictionary-header .dictionary-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1a202c;
+  margin: 0 0 0.5rem 0;
+  background: linear-gradient(120deg, transparent 70%, #ffe066 70%);
+  padding: 0 1rem;
+  display: inline-block;
+}
+.dictionary-header .dictionary-subtitle {
+  font-size: 1rem;
+  color: #4a5568;
+  margin: 0;
+}
+
+.table-container {
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  overflow: hidden;
+  margin-bottom: 2rem;
+}
+
+.words-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+.words-table th, .words-table td {
+  padding: 1rem 1.5rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+.words-table thead {
+  background: #f9fafc;
+}
+.words-table thead th {
+  font-weight: 600;
+  color: #1a202c;
+  text-transform: uppercase;
+  font-size: 0.8rem;
+  letter-spacing: 0.5px;
+}
+.words-table thead th.column-id {
+  width: 100px;
+}
+.words-table thead th.column-index {
+  width: 150px;
+}
+.words-table tbody tr {
+  transition: all 0.2s ease;
+}
+.words-table tbody tr:hover {
+  background: rgb(190.5, 244.25, 255);
+}
+.words-table tbody tr:last-child td {
+  border-bottom: none;
+}
+.words-table tbody .word-row td {
+  color: #1a202c;
+  font-weight: 500;
+}
+.words-table tbody .word-row td.cell-id {
+  color: #4a5568;
+  font-family: monospace;
+}
+.words-table tbody .word-row td.cell-index {
+  color: #00b4d8;
+  font-weight: 600;
+  font-family: monospace;
+}
+.words-table tbody .no-words {
+  text-align: center;
+  color: #4a5568;
+  font-style: italic;
+  padding: 3rem;
+}
+
+.pagination-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+.pagination-info {
+  font-size: 0.9rem;
+  color: #4a5568;
+  font-weight: 500;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.pagination-btn {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.5rem 1rem;
+  background: white;
+  color: #4a5568;
+  text-decoration: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+.pagination-btn:hover:not(.disabled) {
+  background: #00b4d8;
+  color: white;
+  border-color: #00b4d8;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 180, 216, 0.3);
+}
+.pagination-btn.pagination-current {
+  background: #ffe066;
+  color: #1a202c;
+  border-color: #ffe066;
+  font-weight: 600;
+}
+.pagination-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.page-jump-container {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.page-jump-input {
+  width: 70px;
+  padding: 0.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  text-align: center;
+  background: white;
+  transition: all 0.2s ease;
+  /* Firefox */
+  -moz-appearance: textfield;
+  /* Standard property last */
+  -webkit-appearance: textfield;
+          appearance: textfield;
+}
+.page-jump-input:focus {
+  outline: none;
+  border-color: #00b4d8;
+  box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.1);
+}
+.page-jump-input::-moz-placeholder {
+  color: #4a5568;
+  opacity: 0.7;
+}
+.page-jump-input::placeholder {
+  color: #4a5568;
+  opacity: 0.7;
+}
+.page-jump-input::-webkit-outer-spin-button, .page-jump-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.page-jump-btn {
+  padding: 0.5rem 0.75rem;
+  background: #00b4d8;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-appearance: button;
+  -moz-appearance: button;
+  appearance: button;
+}
+.page-jump-btn:hover {
+  background: rgb(0, 137.5, 165);
+  transform: translateY(-1px);
+}
+.page-jump-btn:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+  .dictionary-container {
+    padding: 0 1rem;
+    margin: 1rem auto;
+  }
+  .dictionary-title {
+    font-size: 1.5rem;
+  }
+  .words-table th, .words-table td {
+    padding: 0.75rem 1rem;
+  }
+  .pagination-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .pagination-controls {
+    justify-content: center;
+  }
+  .page-jump-container {
+    order: 1;
+    width: 100%;
+    justify-content: center;
+    margin: 0.5rem 0;
+  }
+  .pagination-controls {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+@media (max-width: 480px) {
+  .words-table {
+    font-size: 0.8rem;
+  }
+  .words-table th, .words-table td {
+    padding: 0.5rem 0.75rem;
+  }
+  .pagination-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.8rem;
+  }
+  .page-jump-input {
+    width: 60px;
+    padding: 0.4rem;
+  }
+  .page-jump-btn {
+    padding: 0.4rem 0.6rem;
+    font-size: 0.8rem;
+  }
+}/*# sourceMappingURL=dictionary.css.map */

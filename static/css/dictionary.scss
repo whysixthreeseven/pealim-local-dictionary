@@ -1,0 +1,312 @@
+// Import your existing variables
+$color-bg: #f9fafc;
+$color-text: #1a202c;
+$color-muted: #4a5568;
+$color-accent: #00b4d8;
+$color-highlight: #ffe066;
+$font-mono: monospace;
+
+// Dictionary Container
+.dictionary-container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+    font-family: $font-mono;
+}
+
+// Header
+.dictionary-header {
+    text-align: center;
+    margin-bottom: 2rem;
+    
+    .dictionary-title {
+        font-size: 2rem;
+        font-weight: 700;
+        color: $color-text;
+        margin: 0 0 0.5rem 0;
+        background: linear-gradient(120deg, transparent 70%, $color-highlight 70%);
+        padding: 0 1rem;
+        display: inline-block;
+    }
+    
+    .dictionary-subtitle {
+        font-size: 1rem;
+        color: $color-muted;
+        margin: 0;
+    }
+}
+
+// Table Container
+.table-container {
+    background: white;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid rgba(0, 0, 0, 0.06);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+// Words Table
+.words-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+    
+    th, td {
+        padding: 1rem 1.5rem;
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+    
+    thead {
+        background: $color-bg;
+        
+        th {
+            font-weight: 600;
+            color: $color-text;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 0.5px;
+            
+            &.column-id {
+                width: 100px;
+            }
+            
+            &.column-index {
+                width: 150px;
+            }
+        }
+    }
+    
+    tbody {
+        tr {
+            transition: all 0.2s ease;
+            
+            &:hover {
+                background: lighten($color-accent, 45%);
+            }
+            
+            &:last-child td {
+                border-bottom: none;
+            }
+        }
+        
+        .word-row {
+            td {
+                color: $color-text;
+                font-weight: 500;
+                
+                &.cell-id {
+                    color: $color-muted;
+                    font-family: $font-mono;
+                }
+                
+                &.cell-index {
+                    color: $color-accent;
+                    font-weight: 600;
+                    font-family: $font-mono;
+                }
+            }
+        }
+        
+        .no-words {
+            text-align: center;
+            color: $color-muted;
+            font-style: italic;
+            padding: 3rem;
+        }
+    }
+}
+
+// Pagination Container
+.pagination-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    padding: 1rem 0;
+}
+
+.pagination-info {
+    font-size: 0.9rem;
+    color: $color-muted;
+    font-weight: 500;
+}
+
+.pagination-controls {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.pagination-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1rem;
+    background: white;
+    color: $color-muted;
+    text-decoration: none;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    
+    &:hover:not(.disabled) {
+        background: $color-accent;
+        color: white;
+        border-color: $color-accent;
+        transform: translateY(-1px);
+        box-shadow: 0 2px 8px rgba(0, 180, 216, 0.3);
+    }
+    
+    &.pagination-current {
+        background: $color-highlight;
+        color: $color-text;
+        border-color: $color-highlight;
+        font-weight: 600;
+    }
+    
+    &.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+}
+
+// Page Jump Styles - ADD THESE
+.page-jump-container {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.page-jump-input {
+    width: 70px;
+    padding: 0.5rem;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    font-family: $font-mono;
+    font-size: 0.85rem;
+    text-align: center;
+    background: white;
+    transition: all 0.2s ease;
+    
+    &:focus {
+        outline: none;
+        border-color: $color-accent;
+        box-shadow: 0 0 0 2px rgba(0, 180, 216, 0.1);
+    }
+    
+    &::placeholder {
+        color: $color-muted;
+        opacity: 0.7;
+    }
+    
+    // Remove number input arrows with vendor prefixes
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+    
+    /* Firefox */
+    -moz-appearance: textfield;
+    
+    /* Standard property last */
+    appearance: textfield;
+}
+
+.page-jump-btn {
+    padding: 0.5rem 0.75rem;
+    background: $color-accent;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-family: $font-mono;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    
+    // Vendor prefixes for appearance
+    -webkit-appearance: button;
+    -moz-appearance: button;
+    appearance: button;
+    
+    &:hover {
+        background: darken($color-accent, 10%);
+        transform: translateY(-1px);
+    }
+    
+    &:active {
+        transform: translateY(0);
+    }
+}
+
+// Responsive Design
+@media (max-width: 768px) {
+    .dictionary-container {
+        padding: 0 1rem;
+        margin: 1rem auto;
+    }
+    
+    .dictionary-title {
+        font-size: 1.5rem;
+    }
+    
+    .words-table {
+        th, td {
+            padding: 0.75rem 1rem;
+        }
+    }
+    
+    .pagination-container {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .pagination-controls {
+        justify-content: center;
+    }
+    
+    // Responsive adjustments for page jump
+    .page-jump-container {
+        order: 1;
+        width: 100%;
+        justify-content: center;
+        margin: 0.5rem 0;
+    }
+    
+    .pagination-controls {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .words-table {
+        font-size: 0.8rem;
+        
+        th, td {
+            padding: 0.5rem 0.75rem;
+        }
+    }
+    
+    .pagination-btn {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.8rem;
+    }
+    
+    .page-jump-input {
+        width: 60px;
+        padding: 0.4rem;
+    }
+    
+    .page-jump-btn {
+        padding: 0.4rem 0.6rem;
+        font-size: 0.8rem;
+    }
+}
