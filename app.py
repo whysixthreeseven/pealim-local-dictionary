@@ -106,22 +106,6 @@ with application.app_context():
     
 """
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-JSON COLLECTION AQUIRING & VERIFICATION
-
-"""
-
-
-# Scripts import:
-from utilities import collect, verification
-
-# Running verification:
-json_verified: bool = verification.verify_json_collection()
-if not json_verified:
-    collect.collect_dictionary()
-
-    
-"""
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 REGISTERING BLUEPRINTS
 
 """
@@ -170,3 +154,4 @@ def application_run() -> None:
 
 if __name__ == "__main__":
     application_run()
+

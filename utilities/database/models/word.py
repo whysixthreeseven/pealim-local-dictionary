@@ -37,18 +37,22 @@ class Word(DATABASE.Model):
     # Core attributes:
     ID = Column(Integer, primary_key = True, nullable = False, unique = True, autoincrement = True)
     INDEX = Column(Integer, nullable = False, unique = True)
+
+    # Table injection attributes:
+    HTML_CONTAINER_LANG_RU = Column(String, nullable = False)
+    HTML_CONTAINER_LANG_EN = Column(String, nullable = False)
+    HTML_CONTAINER_LANG_HE = Column(String, nullable = False)
     
     # Translation and transcribtion attributes::
     TRANSLATION_LANG_HE = Column(String, nullable = True)
     TRANSLATION_LANG_RU = Column(String, nullable = True)
     TRANSLATION_LANG_EN = Column(String, nullable = True)
+    TRANSCRIBTION_LANG_HE = Column(String, nullable = True)
     TRANSCRIBTION_LANG_RU = Column(String, nullable = True)
     TRANSCRIBTION_LANG_EN = Column(String, nullable = True)
-    
-    # Table injection attributes:
-    HTML_CONTAINER_LANG_RU = Column(String, nullable = False)
-    HTML_CONTAINER_LANG_EN = Column(String, nullable = False)
-    HTML_CONTAINER_LANG_HE = Column(String, nullable = False)
+    SEARCH_LANG_HE = Column(JSON, nullable = True)
+    SEARCH_LANG_RU = Column(JSON, nullable = True)
+    SEARCH_LANG_EN = Column(JSON, nullable = True)
     
     
     """
