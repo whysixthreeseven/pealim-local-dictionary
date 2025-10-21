@@ -123,9 +123,12 @@ class Converter:
         
         :return List: List of Word model instances ready for database insertion.
         """
+        
+        # Logging:
+        log.info(f"Converting extracted JSON data to model instances, please wait...")
 
         # Extracting data and creating Word instance:
-        word_entry_list = []
+        word_entry_list: list[Word] = []
         for page_index, entry_data in self.json_data.items():
             word_instance = self.__extract(
                 page_index = page_index, 
@@ -138,9 +141,15 @@ class Converter:
                     word_instance
                     )
         
-        # Echo:
+        # Logging:
         word_entry_count: int = len(word_entry_list)
         log.info(f"Converted {word_entry_count} entries to model instances")
+        
+        # Composing:
+        log.info(f"Composing word entries, please wait...")
+        for word_entry in word_entry_list:
+            word_entry.compose()
+        log.info(f"Composed {word_entry_count} entries to model instances")
 
         # Returning:
         return word_entry_list

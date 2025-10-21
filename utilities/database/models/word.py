@@ -9,6 +9,10 @@ from sqlalchemy.orm import validates
 # Typing and annotations import
 from typing import Any, Literal, Optional
 
+# HTML composition related imports:
+from bs4 import BeautifulSoup
+import re
+
 # Database import:
 from utilities.database import DATABASE
 
@@ -191,6 +195,66 @@ class Word(DATABASE.Model):
         """
 
         ...
+        
+        
+    def __repair(self) -> None:
+        """
+        Cleans and rewrites internal links in all language HTML containers.
+
+        Rules:
+        - Keeps only links of type `/dict/<id>-...` and converts them to `/dictionary/<lang>/<id>`
+        - Removes or unlinks all links containing `/dict/?...`
+        - Updates each HTML_CONTAINER_LANG_<lang> field in place
+        """
+
+        # Composing language to container index dictionary:        
+        locale_html_index = {
+            "ru": self.HTML_CONTAINER_LANG_RU,
+            "en": self.HTML_CONTAINER_LANG_EN,
+            "he": self.HTML_CONTAINER_LANG_HE,
+            }
+
+        # Looping through all languages and their containers:
+        for language, container_html in locale_html_index.items():
+            if not container_html:
+                continue
+
+            # Creating soup instance:
+            soup = BeautifulSoup(container_html, "html.parser")
+            
+            # Searching for all anchor tags:            
+            html_changed = False
+            for tag_a in soup.find_all("a", href=True):
+                href_attribute = tag_a["href"]
+
+                # Removing radical/parameter links:
+                link_remove_pattern: str = r"/dict/\?.+"
+                link_remove_found = re.search(link_remove_pattern, href_attribute)
+                if link_remove_found:
+                    tag_a.unwrap()
+                    html_changed = True
+                    continue
+
+                # Matching dict/<id> pattern (with optional slug)
+                link_match_pattern: str = r"/dict/(\d+)(?:-[\w-]*)?/?"
+                link_match_found = re.search(link_match_pattern, href_attribute)
+                if link_match_found:
+                    word_id = link_match_found.group(1)
+                    href_attribute_replace = f"/dictionary/{language}/{word_id}"
+                    tag_a["href"] = href_attribute_replace
+                    html_changed = True
+
+            # Converting soup back to HTML string:
+            if html_changed:
+                updated_html = str(soup)
+                
+                # Updating attribute:
+                if language == "ru":
+                    self.HTML_CONTAINER_LANG_RU = updated_html
+                elif language == "en":
+                    self.HTML_CONTAINER_LANG_EN = updated_html
+                elif language == "he":
+                    self.HTML_CONTAINER_LANG_HE = updated_html
 
     
     def compose(self) -> None:
@@ -198,6 +262,7 @@ class Word(DATABASE.Model):
         TODO: Create a docstring.
         """
 
-        ...
+        # Reparing HTML containers:
+        self.__repair()
 
     
