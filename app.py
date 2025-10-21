@@ -102,6 +102,22 @@ environment.initialize_database_environment()
 with application.app_context():
     DATABASE.create_all()
     log.info("Database tables created")
+
+
+"""
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+DEBUG, MANUAL COMMANDS AND INJECTIONS BLOCK
+
+"""
+
+
+# Importing session class instance:
+from session import SESSION
+
+
+# Manual verifications:
+with application.app_context():
+    SESSION.verify_data()
     
     
 """
