@@ -54,7 +54,7 @@ def search():
     # Rendering empty results page if query is empty:
     if not query_input:
         page_route: str = render_template(
-            template_name_or_list = "search_results.html", 
+            template_name_or_list = "search.html", 
             query = None, 
             results = [], 
             language = None

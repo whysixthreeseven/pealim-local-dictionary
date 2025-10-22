@@ -1,5 +1,5 @@
 # Flask-related imports:
-from flask import Blueprint, render_template, abort
+from flask import abort, Blueprint, render_template, session 
 from typing import Any
 
 # Settings and database imports:
@@ -51,6 +51,9 @@ def word_detail(language: str, word_index: int) -> str:
     # Validate language
     if language not in SUPPORTED_LANGUAGES:
         abort(404, description="Language not supported")
+        
+    # Saving last used language:
+    session["LANG_USED"] = language
     
     # Getting word from database:
     word = DATABASE.session.query(Word)\
