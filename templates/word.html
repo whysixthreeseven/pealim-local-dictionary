@@ -30,10 +30,12 @@
             <!-- Language Navigation -->
             <div class="language-nav">
                 <div class="language-buttons">
+                    {% if word.LANG_RU_AVAILABLE %}
                     <a href="{{ url_for('word.word_detail', language='ru', word_index=word.INDEX) }}" 
                        class="language-btn {% if language == 'ru' %}active{% endif %}">
                         Русский
                     </a>
+                    {% endif %}
                     <a href="{{ url_for('word.word_detail', language='en', word_index=word.INDEX) }}" 
                        class="language-btn {% if language == 'en' %}active{% endif %}">
                         English

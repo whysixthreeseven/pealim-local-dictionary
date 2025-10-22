@@ -382,7 +382,7 @@ def __clean_dictionary():
     for word_id, language_container in data.items():
         word_count += 1
         for language, scrap_container in language_container.items():
-            scrap_container += 1
+            container_count += 1
             html_container = scrap_container.get("container", "")
             if not html_container:
                 continue

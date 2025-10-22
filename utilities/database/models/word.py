@@ -180,6 +180,56 @@ class Word(DATABASE.Model):
     
     """
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    LANGUAGE LOCALE AVAILABILITY PROPERTIES
+    
+    """
+    
+    
+    @property
+    def LANG_RU_AVAILABLE(self) -> bool:
+        """
+        TODO: Create a docstring.
+        """
+        
+        # Getting container sizes:
+        container_en_size: int = len(self.HTML_CONTAINER_LANG_EN)
+        container_ru_size: int = len(self.HTML_CONTAINER_LANG_RU)
+        
+        # Comparing container sizes:
+        language_available: bool = True
+        if container_en_size == container_ru_size:
+            language_available: bool = False
+            
+        # Returning:
+        return language_available
+    
+    
+    @property
+    def LANG_EN_AVAILABLE(self) -> bool:
+        """
+        TODO: Create a docstring.
+        """
+        
+        # Returning:
+        return True
+    
+    
+    @property
+    def LANG_HE_AVAILABLE(self) -> bool:
+        """
+        TODO: Create a docstring.
+        """
+        
+        # Returning:
+        return True
+    
+    
+    
+        
+    
+    
+    """
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     COMPOSITION METHODS
     
     """

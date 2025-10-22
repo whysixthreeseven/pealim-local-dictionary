@@ -39,11 +39,13 @@
                         <td class="cell-index">{{ word.INDEX }}</td>
                         <td class="cell-languages">
                             <div class="language-buttons">
-                                <a href="{{ url_for('word.word_detail', language='ru', word_index=word.INDEX) }}" 
-                                   class="lang-btn lang-ru" 
-                                   title="View in Russian">
-                                    RU
-                                </a>
+                                {% if word.LANG_RU_AVAILABLE %}
+                                    <a href="{{ url_for('word.word_detail', language='ru', word_index=word.INDEX) }}" 
+                                        class="lang-btn lang-ru" 
+                                        title="View in Russian">
+                                        RU
+                                    </a>
+                                {% endif %}
                                 <a href="{{ url_for('word.word_detail', language='en', word_index=word.INDEX) }}" 
                                    class="lang-btn lang-en" 
                                    title="View in English">
@@ -58,7 +60,7 @@
                         </td>
                         <td class="cell-translation-he">{{ word.TRANSLATION_LANG_HE }}</td>
                         <td class="cell-translation-en">{{ word.TRANSLATION_LANG_EN }}</td>
-                        <td class="cell-translation-ru">{{ word.TRANSLATION_LANG_RU }}</td>
+                        <td class="cell-translation-ru"> {{ word.TRANSLATION_LANG_RU if word.LANG_RU_AVAILABLE else '—' }}</td>
                     </tr>
                     {% else %}
                     <tr>

@@ -51,71 +51,55 @@ $font-mono: monospace;
     width: 100%;
     border-collapse: collapse;
     font-size: 0.9rem;
+    table-layout: auto;
     
     th, td {
-        padding: 1rem 1.5rem;
+        padding: 0.5rem 1rem;
         text-align: left;
         border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     }
     
     thead {
-        background: $color-bg;
-        
         th {
-            font-weight: 600;
-            color: $color-text;
-            text-transform: uppercase;
-            font-size: 0.8rem;
-            letter-spacing: 0.5px;
-            
+            // ID column — very small, right-aligned
             &.column-id {
-                width: 100px;
+                width: 60px;
+                text-align: right;
             }
-            
+
+            // INDEX column — small but readable
             &.column-index {
-                width: 150px;
+                width: 80px;
+                text-align: right;
+            }
+
+            // LANGUAGE column — fixed width for 3 buttons
+            &.column-languages {
+                width: 110px;
+                text-align: center;
             }
         }
     }
-    
+
     tbody {
-        tr {
-            transition: all 0.2s ease;
-            
-            &:hover {
-                background: lighten($color-accent, 45%);
-            }
-            
-            &:last-child td {
-                border-bottom: none;
-            }
+        td.column-id,
+        td.cell-id {
+            text-align: right;
+            padding-right: 1rem;
         }
-        
-        .word-row {
-            td {
-                color: $color-text;
-                font-weight: 500;
-                
-                &.cell-id {
-                    color: $color-muted;
-                    font-family: $font-mono;
-                }
-                
-                &.cell-index {
-                    color: $color-accent;
-                    font-weight: 600;
-                    font-family: $font-mono;
-                }
-            }
+
+        td.column-index,
+        td.cell-index {
+            text-align: right;
+            padding-right: 1rem;
         }
-        
-        .no-words {
+
+        td.column-languages,
+        td.cell-languages {
             text-align: center;
-            color: $color-muted;
-            font-style: italic;
-            padding: 3rem;
         }
     }
+
 }
 
 // Pagination Container
@@ -258,9 +242,9 @@ $font-mono: monospace;
     }
     
     .words-table {
-        th, td {
-            padding: 0.75rem 1rem;
-        }
+        th.column-id { width: 40px; }
+        th.column-index { width: 60px; }
+        th.column-languages { width: 90px; }
     }
     
     .pagination-container {

@@ -122,7 +122,6 @@ class Converter:
 
         # Running compose method on word instance:
         word_instance.compose()
-        pass
     
     
     def __convert(self) -> List[Word]:
@@ -155,8 +154,8 @@ class Converter:
                     )
         
         # Running compose() concurrently on threads:
-        # max_workers: int = min(32, (os.cpu_count() or 1) * 2)     # <- For better machines
-        max_workers: int = 4
+        max_workers: int = min(32, (os.cpu_count() or 1) * 2)     # <- For better machines
+        # max_workers: int = 4                                      # <- For my old potato
         with ThreadPoolExecutor(max_workers = max_workers) as executor:
             futures = [executor.submit(self.__compose, word_instance) for word_instance in word_entry_list]
             for future in as_completed(futures):

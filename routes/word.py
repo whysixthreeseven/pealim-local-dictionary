@@ -78,8 +78,7 @@ def word_detail(language: str, word_index: int) -> str:
         'language': language,
         'container_html': container_html,
         'translation': translation,
-        # 'hebrew_word': word.TRANSLATION_LANG_HE,  # Hebrew word for header
-        'hebrew_word': "%HEBREW WORD",
+        'hebrew_word': word.TRANSLATION_LANG_HE,
         }
 
     # Generating page route:

@@ -37,55 +37,38 @@
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9rem;
+  table-layout: auto;
 }
 .words-table th, .words-table td {
-  padding: 1rem 1.5rem;
+  padding: 0.5rem 1rem;
   text-align: left;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
-.words-table thead {
-  background: #f9fafc;
-}
-.words-table thead th {
-  font-weight: 600;
-  color: #1a202c;
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.5px;
-}
 .words-table thead th.column-id {
-  width: 100px;
+  width: 60px;
+  text-align: right;
 }
 .words-table thead th.column-index {
-  width: 150px;
+  width: 80px;
+  text-align: right;
 }
-.words-table tbody tr {
-  transition: all 0.2s ease;
-}
-.words-table tbody tr:hover {
-  background: rgb(190.5, 244.25, 255);
-}
-.words-table tbody tr:last-child td {
-  border-bottom: none;
-}
-.words-table tbody .word-row td {
-  color: #1a202c;
-  font-weight: 500;
-}
-.words-table tbody .word-row td.cell-id {
-  color: #4a5568;
-  font-family: monospace;
-}
-.words-table tbody .word-row td.cell-index {
-  color: #00b4d8;
-  font-weight: 600;
-  font-family: monospace;
-}
-.words-table tbody .no-words {
+.words-table thead th.column-languages {
+  width: 110px;
   text-align: center;
-  color: #4a5568;
-  font-style: italic;
-  padding: 3rem;
+}
+.words-table tbody td.column-id,
+.words-table tbody td.cell-id {
+  text-align: right;
+  padding-right: 1rem;
+}
+.words-table tbody td.column-index,
+.words-table tbody td.cell-index {
+  text-align: right;
+  padding-right: 1rem;
+}
+.words-table tbody td.column-languages,
+.words-table tbody td.cell-languages {
+  text-align: center;
 }
 
 .pagination-container {
@@ -213,8 +196,14 @@
   .dictionary-title {
     font-size: 1.5rem;
   }
-  .words-table th, .words-table td {
-    padding: 0.75rem 1rem;
+  .words-table th.column-id {
+    width: 40px;
+  }
+  .words-table th.column-index {
+    width: 60px;
+  }
+  .words-table th.column-languages {
+    width: 90px;
   }
   .pagination-container {
     flex-direction: column;
