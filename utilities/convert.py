@@ -122,6 +122,7 @@ class Converter:
 
         # Running compose method on word instance:
         word_instance.compose()
+        pass
     
     
     def __convert(self) -> List[Word]:
