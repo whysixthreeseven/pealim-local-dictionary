@@ -45,16 +45,24 @@ class Word(DATABASE.Model):
     HTML_CONTAINER_LANG_EN = Column(String, nullable = False)
     HTML_CONTAINER_LANG_HE = Column(String, nullable = False)
     
-    # Translation and transcribtion attributes::
+    # Translation and transcribtion attributes:
     TRANSLATION_LANG_HE = Column(String, nullable = True)
     TRANSLATION_LANG_RU = Column(String, nullable = True)
     TRANSLATION_LANG_EN = Column(String, nullable = True)
-    # TRANSCRIBTION_LANG_HE = Column(String, nullable = True)
-    TRANSCRIBTION_LANG_RU = Column(String, nullable = True)
-    TRANSCRIBTION_LANG_EN = Column(String, nullable = True)
-    # SEARCH_LANG_HE = Column(JSON, nullable = True)
-    # SEARCH_LANG_RU = Column(JSON, nullable = True)
-    # SEARCH_LANG_EN = Column(JSON, nullable = True)
+    TRANSCRIPTION_LANG_HE = Column(String, nullable = True)
+    TRANSCRIPTION_LANG_RU = Column(String, nullable = True)
+    TRANSCRIPTION_LANG_EN = Column(String, nullable = True)
+    TYPE_LANG_HE = Column(String, nullable = True)
+    TYPE_LANG_RU = Column(String, nullable = True)
+    TYPE_LANG_EN = Column(String, nullable = True)
+    SEARCH_LANG_HE = Column(JSON, nullable = True)
+    SEARCH_LANG_RU = Column(JSON, nullable = True)
+    SEARCH_LANG_EN = Column(JSON, nullable = True)
+
+    # Status attributes:
+    STATUS_FAVOURITE = Column(Boolean, nullable = True, default = False)
+    STATUS_TO_LEARN = Column(Boolean, nullable = True, default = False)
+    STATUS_KNOWN = Column(Boolean, nullable = True, default = False)
 
 
     """
@@ -64,11 +72,7 @@ class Word(DATABASE.Model):
     """
 
     
-    @property
-    def STATUS_SAVED(self) -> bool:
-        import random
-        return random.choice((True, False))
-
+    ...     # <- There is nothing here yet.
     
     
     """
@@ -181,80 +185,197 @@ class Word(DATABASE.Model):
     """
 
 
-    def __compose_translation(self) -> None:
+    def __compose_translation(self, language: str) -> Optional[str]:
         """
         TODO: Create a docstring.
         """
 
-        ...
+        # Normalizing and validating language argument:
+        language = language.lower().strip()
+
+        # English and Russian extraction:
+        if language in ("en", "ru"):
+
+            # Selecting corresponding HTML container:
+            html_container: Optional[str] = None
+            if language == "en": html_container = self.HTML_CONTAINER_LANG_EN
+            elif language == "ru": html_container = self.HTML_CONTAINER_LANG_RU
+
+            # Returning None, if failed to select container:
+            if not html_container:
+                return None
+
+            # Attempting to extract translation text:
+            try:
+                soup = BeautifulSoup(html_container, "html.parser")
+                lead_div = soup.find("div", class_="lead")
+                if not lead_div or not lead_div.text:
+                    return None
+                
+                # Cleaning up and normalizing text
+                translation_text = lead_div.get_text(strip=True)
+                return translation_text or None
+
+            # Handling exception errors and logging:
+            except Exception as exception_error:
+                log.warning(f"Failed to extract translation ({language}) for Word ID={self.ID}: {exception_error}")
+
+            # Returning None if extraction fails:
+            return None
+        
+        # Hebrew language extraction:
+        elif language == "he":
+
+            # Returning None, if failed to select container:
+            html_container = self.HTML_CONTAINER_LANG_HE
+            if not html_container:
+                return None
+
+            # Attempting to soup it out:
+            try:
+                soup = BeautifulSoup(html_container, "html.parser")
+                header = soup.find("h2", class_="page-header")
+                if not header or not header.text:
+                    return None
+
+                # Removing nested <span> elements:
+                for span in header.find_all("span"):
+                    span.decompose()
+
+                # Formatting extracted text:
+                header_text = header.get_text(
+                    strip = True
+                    )
+
+                # Splitting by spaces and taking the last word:
+                words = header_text.split()
+                if words:
+                    return words[-1]
+
+            # Handling exceptions, logging and returning None:
+            except Exception as exception_error:
+                log.warning(f"Failed to extract Hebrew word for Word ID={self.ID}: {exception_error}")
+                return None
+        
+        # Unsupported language error:
+        else:
+            log.warning(f"Unsupported language '{language}' for translation extraction.")
+            return None
+        
+
+    def __compose_search(self, translation_text: Optional[str]) -> Optional[list[str]]:
+        """
+        Splits a translation string into a list of individual searchable terms.
+
+        This method prepares language-specific search index lists by splitting the provided 
+        translation string (e.g. "write, to write, compose") into a clean list of words 
+        (["write", "to write", "compose"]). Empty or  whitespace-only entries are ignored.
+
+        :param Optional[str] translation_text: The translation string to process.
+        :return Optional[list[str]]: List of cleaned search terms, or None if input is empty.
+        """
+
+        # Preparing search container:
+        search_container: list[str] | None= None
+
+        # Safely split translation strings into word lists for search indexing
+        if translation_text:
+            search_container: list[str] = [
+                token.strip() for token 
+                in translation_text.split(",") 
+                if token.strip()
+                ]
+        
+        # Returning:
+        return search_container
+    
+
+    def __compose_transcription(self, html_container: Optional[str]) -> Optional[str]:
+        """
+        Extracts the word transcription (phonetic pronunciation) from a HTML container.
+
+        Depending on the part of speech, Pealim pages place transcriptions in different sections:
+        - Verbs:      inside `<div id="INF-L">` ... `<div class="transcription">...</div>`
+        - Nouns:      inside `<div id="s">` ... `<div class="transcription">...</div>`
+        - Adjectives: inside `<div id="ms-a">` ... `<div class="transcription">...</div>`
+        - Adverbs / Conjunctions / Others: inside `<div class="lead">` ... `<div class="transcription">...</div>`
+
+        :return Optional[str]: Cleaned transcription text, or None if not found.
+        """
+
+        if not html_container:
+            return None
+
+        try:
+            soup = BeautifulSoup(html_container, "html.parser")
+
+            # Define possible transcription locations (order matters)
+            search_selector_list = [
+                ("div", {"id":    "INF-L"}),   # verbs
+                ("div", {"id":    "s"}),       # nouns
+                ("div", {"id":    "ms-a"}),    # adjectives
+                ("div", {"class": "lead"})  # adverbs, conjunctions
+                ]
+
+            # Locating section:
+            for html_tag, tag_attribute_list in search_selector_list:
+                section = soup.find(
+                    html_tag, 
+                    attrs = tag_attribute_list
+                    )
+                if not section:
+                    continue
+                
+                # Locating transcription div:
+                transcription = section.find("div", class_="transcription")
+                if transcription and transcription.text:
+
+                    # Extracting text with <b> elements flattened:
+                    transcription_text = transcription.get_text(strip = True)
+                    return transcription_text
+
+        # Handling exception errors and logging:
+        except Exception as exception_error:
+            log.warning(f"Failed to extract transcription for Word ID={self.ID}: {exception_error}")
+
+        # Returning none, if failed to compose:
+        return None
 
     
-    def __compose_transcribtion(self) -> None:
-        """
-        TODO: Create a docstring.
-        """
+    def __compose_type(self, html_container: str) -> Optional[str]:
 
-        ...
-        
-        
-    def __repair(self) -> None:
-        """
-        Cleans and rewrites internal links in all language HTML containers.
+        # Returning None, if HTML container does not exist:
+        if not html_container:
+            return None
 
-        Rules:
-        - Keeps only links of type `/dict/<id>-...` and converts them to `/dictionary/<lang>/<id>`
-        - Removes or unlinks all links containing `/dict/?...`
-        - Updates each HTML_CONTAINER_LANG_<lang> field in place
-        """
+        # Attempting to extract an element:
+        try:
+            soup = BeautifulSoup(html_container, "html.parser")
 
-        # Composing language to container index dictionary:        
-        locale_html_index = {
-            "ru": self.HTML_CONTAINER_LANG_RU,
-            "en": self.HTML_CONTAINER_LANG_EN,
-            "he": self.HTML_CONTAINER_LANG_HE,
-            }
-
-        # Looping through all languages and their containers:
-        for language, container_html in locale_html_index.items():
-            if not container_html:
-                continue
-
-            # Creating soup instance:
-            soup = BeautifulSoup(container_html, "html.parser")
+            # Find the first <p> tag inside the .container div
+            container = soup.find("div", class_="container")
+            if not container:
+                return None
             
-            # Searching for all anchor tags:            
-            html_changed = False
-            for tag_a in soup.find_all("a", href=True):
-                href_attribute = tag_a["href"]
+            type_tag = container.find("p")
+            if not type_tag:
+                return None
+            
+            # Extract the text from the <p> tag and formatting:
+            type_text = type_tag.get_text(strip=True)
+            type_text_split = type_text.split("-")[0].strip()
+            type_text_split = type_text_split.lower()
+            type_text_split = type_text_split.capitalize()
 
-                # Removing radical/parameter links:
-                link_remove_pattern: str = r"/dict/\?.+"
-                link_remove_found = re.search(link_remove_pattern, href_attribute)
-                if link_remove_found:
-                    tag_a.unwrap()
-                    html_changed = True
-                    continue
+            # Only return valid POS types
+            return type_text_split
 
-                # Matching dict/<id> pattern (with optional slug)
-                link_match_pattern: str = r"/dict/(\d+)(?:-[\w-]*)?/?"
-                link_match_found = re.search(link_match_pattern, href_attribute)
-                if link_match_found:
-                    word_id = link_match_found.group(1)
-                    href_attribute_replace = f"/dictionary/{language}/{word_id}"
-                    tag_a["href"] = href_attribute_replace
-                    html_changed = True
+        # Handling exception errors and logging:
+        except Exception as exception_error:
+            log.warning(f"Failed to extract part of speech for Word ID={self.ID}: {exception_error}")
 
-            # Converting soup back to HTML string:
-            if html_changed:
-                updated_html = str(soup)
-                
-                # Updating attribute:
-                if language == "ru":
-                    self.HTML_CONTAINER_LANG_RU = updated_html
-                elif language == "en":
-                    self.HTML_CONTAINER_LANG_EN = updated_html
-                elif language == "he":
-                    self.HTML_CONTAINER_LANG_HE = updated_html
+        # Returning none, if failed to compose:
+        return None
 
     
     def compose(self) -> None:
@@ -262,7 +383,47 @@ class Word(DATABASE.Model):
         TODO: Create a docstring.
         """
 
-        # Reparing HTML containers:
-        self.__repair()
+        # Composing translations:
+        self.TRANSLATION_LANG_HE: str = self.__compose_translation(
+            language = "he"
+            )
+        self.TRANSLATION_LANG_EN: str = self.__compose_translation(
+            language = "en"
+            )
+        self.TRANSLATION_LANG_RU: str = self.__compose_translation(
+            language = "ru"
+            )
 
-    
+        # Splitting translation text and composing search index lists:
+        self.SEARCH_LANG_HE: Optional[list[str]] = self.__compose_search(
+            translation_text = self.TRANSLATION_LANG_HE
+            )
+        self.SEARCH_LANG_EN: Optional[list[str]] = self.__compose_search(
+            translation_text = self.TRANSLATION_LANG_EN
+            )
+        self.SEARCH_LANG_RU: Optional[list[str]] = self.__compose_search(
+            translation_text = self.TRANSLATION_LANG_RU
+            )
+        
+        # Finding transcription elements and extracting text:
+        self.TRANSCRIPTION_LANG_HE: str = self.__compose_transcription(
+            html_container = self.HTML_CONTAINER_LANG_HE
+            )
+        self.TRANSCRIPTION_LANG_EN: str = self.__compose_transcription(
+            html_container = self.HTML_CONTAINER_LANG_EN
+            )
+        self.TRANSCRIPTION_LANG_RU: str = self.__compose_transcription(
+            html_container = self.HTML_CONTAINER_LANG_RU
+            )
+
+        # Finding type elements and extracting text:
+        self.TYPE_LANG_HE: str = self.__compose_type(
+            html_container = self.HTML_CONTAINER_LANG_HE
+            )
+        self.TYPE_LANG_EN: str = self.__compose_type(
+            html_container = self.HTML_CONTAINER_LANG_EN
+            )
+        self.TYPE_LANG_RU: str = self.__compose_type(
+            html_container = self.HTML_CONTAINER_LANG_RU
+            )
+        

@@ -8,6 +8,9 @@ import json
 # Typing and annotations:
 from typing import Dict, List, Optional
 
+# Threaded composition library:
+import os
+from concurrent.futures import ThreadPoolExecutor, as_completed
 
 # Local settings import:
 from configuration import SETTINGS
@@ -110,6 +113,15 @@ class Converter:
         except Exception as exception_error:
             log.error(f"Error converting page {page_index} to model: {exception_error}")
             return None
+        
+    
+    def __compose(self, word_instance: Word) -> None:
+        """
+        TODO: Create a docstring.
+        """
+
+        # Running compose method on word instance:
+        word_instance.compose()
     
     
     def __convert(self) -> List[Word]:
@@ -125,7 +137,7 @@ class Converter:
         """
         
         # Logging:
-        log.info(f"Converting extracted JSON data to model instances, please wait...")
+        log.info(f"Converting extracted JSON data to model instances and composing data...")
 
         # Extracting data and creating Word instance:
         word_entry_list: list[Word] = []
@@ -141,16 +153,23 @@ class Converter:
                     word_instance
                     )
         
+        # Running compose() concurrently on threads:
+        # max_workers: int = min(32, (os.cpu_count() or 1) * 2)     # <- For better machines
+        max_workers: int = 4
+        with ThreadPoolExecutor(max_workers = max_workers) as executor:
+            futures = [executor.submit(self.__compose, word_instance) for word_instance in word_entry_list]
+            for future in as_completed(futures):
+                try:
+                    future.result()
+
+                # Logging error:
+                except Exception as exception_error:
+                    log.error(f"Error composing word: {exception_error}")
+        
         # Logging:
         word_entry_count: int = len(word_entry_list)
         log.info(f"Converted {word_entry_count} entries to model instances")
         
-        # # Composing:
-        # log.info(f"Composing word entries, please wait...")
-        # for word_entry in word_entry_list:
-        #     word_entry.compose()
-        # log.info(f"Composed {word_entry_count} entries to model instances")
-
         # Returning:
         return word_entry_list
     
@@ -213,7 +232,7 @@ class Converter:
         return word_entry_saved_count
 
 
-def compose():
+def run():
     """
     Execute the complete JSON-to-database conversion pipeline.
     

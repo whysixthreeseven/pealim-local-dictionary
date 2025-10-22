@@ -362,55 +362,52 @@ async def __collect_dictionary():
     log.info(f"Pages missing: f{scraper.scrap_missing}")
 
 
-def clean_dictionary():
+def __clean_dictionary():
     """
-    Fast regex-based cleanup for HTML containers inside JSON structure.
-    
-    Args:
-        data (dict): dictionary of all word entries
-    
-    Returns:
-        dict: updated dictionary with cleaned HTML containers
+    Fast regex-based cleanup for HTML containers inside JSON structure. Overwrites JSON container.
     """
-        
+    
+    # Opening JSON file:
     json_filepath = SETTINGS.JSON_COLLECTION_FILEPATH
     with open(json_filepath, "r", encoding="utf-8") as json_file:
         data = json.load(json_file)
 
-    # Precompile regex patterns
+    # Precompiling regex patterns
     re_query_links = re.compile(r'<a[^>]+href="[^"]*/dict/\?.*?"[^>]*>(.*?)</a>', re.DOTALL)
     re_dict_links = re.compile(r'href="[^"]*/dict/(\d+)(?:-[^"/]*)?/?[^"]*"')
 
-    for word_id, langs in data.items():
-        for lang, info in langs.items():
-            container = info.get("container", "")
-            if not container:
+    # Running regex cleanup on each word, language and container:
+    word_count: int = 0
+    container_count: int = 0
+    for word_id, language_container in data.items():
+        word_count += 1
+        for language, scrap_container in language_container.items():
+            scrap_container += 1
+            html_container = scrap_container.get("container", "")
+            if not html_container:
                 continue
 
-            original_container = container
+            # Saving original container:
+            original_container = html_container
 
-            # 1️⃣ Remove <a> tags with query-style links (keep their text)
-            container = re_query_links.sub(r'\1', container)
+            # Removing <a> tags with query-style links (keep their text)
+            html_container = re_query_links.sub(r'\1', html_container)
 
-            # 2️⃣ Rewrite /dict/#### links
-            container = re_dict_links.sub(lambda m: f'href="/dictionary/{lang}/{m.group(1)}"', container)
+            # Rewriting /dict/#### links
+            html_container = re_dict_links.sub(lambda m: f'href="/dictionary/{language}/{m.group(1)}"', html_container)
 
-            # Save back
-            info["container"] = container
+            # Overwriting container:
+            scrap_container["container"] = html_container
 
-            if original_container != container:
-                print(f"✅ Cleaned {lang.upper()} for word {word_id}")
-
-
-    # Save cleaned JSON back
+    # Saving cleaned JSON back
     with open(json_filepath, "w", encoding="utf-8") as out:
         json.dump(data, out, ensure_ascii=False, indent=2)
 
-    print(f"✅ Cleaned containers successfully.")
-
-
+    # Logging:
+    log.info(f"Cleaned containers for {word_count} words ({container_count} containers).")
     
 
 def collect_dictionary():
     asyncio.run(__collect_dictionary())
+    __clean_dictionary()
 

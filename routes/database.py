@@ -66,8 +66,6 @@ def database() -> str:
         elif "rebuild_database" in request.form:
                 log.info("Rebuild Database button clicked - starting rebuild process...")
                 
-
-
                 # Attempting to rebuild:
                 try:
 
