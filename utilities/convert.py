@@ -145,11 +145,11 @@ class Converter:
         word_entry_count: int = len(word_entry_list)
         log.info(f"Converted {word_entry_count} entries to model instances")
         
-        # Composing:
-        log.info(f"Composing word entries, please wait...")
-        for word_entry in word_entry_list:
-            word_entry.compose()
-        log.info(f"Composed {word_entry_count} entries to model instances")
+        # # Composing:
+        # log.info(f"Composing word entries, please wait...")
+        # for word_entry in word_entry_list:
+        #     word_entry.compose()
+        # log.info(f"Composed {word_entry_count} entries to model instances")
 
         # Returning:
         return word_entry_list

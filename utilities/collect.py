@@ -6,6 +6,7 @@ log = logging.getLogger(__name__)
 import aiohttp
 import asyncio
 import json
+import re
 
 # Beautiful soup import:
 from bs4 import BeautifulSoup
@@ -359,6 +360,55 @@ async def __collect_dictionary():
     scraper.save_progress()
     log.info(f"Scraping completed. Found f{len(scraper.scrap_results)} valid pages!")
     log.info(f"Pages missing: f{scraper.scrap_missing}")
+
+
+def clean_dictionary():
+    """
+    Fast regex-based cleanup for HTML containers inside JSON structure.
+    
+    Args:
+        data (dict): dictionary of all word entries
+    
+    Returns:
+        dict: updated dictionary with cleaned HTML containers
+    """
+        
+    json_filepath = SETTINGS.JSON_COLLECTION_FILEPATH
+    with open(json_filepath, "r", encoding="utf-8") as json_file:
+        data = json.load(json_file)
+
+    # Precompile regex patterns
+    re_query_links = re.compile(r'<a[^>]+href="[^"]*/dict/\?.*?"[^>]*>(.*?)</a>', re.DOTALL)
+    re_dict_links = re.compile(r'href="[^"]*/dict/(\d+)(?:-[^"/]*)?/?[^"]*"')
+
+    for word_id, langs in data.items():
+        for lang, info in langs.items():
+            container = info.get("container", "")
+            if not container:
+                continue
+
+            original_container = container
+
+            # 1️⃣ Remove <a> tags with query-style links (keep their text)
+            container = re_query_links.sub(r'\1', container)
+
+            # 2️⃣ Rewrite /dict/#### links
+            container = re_dict_links.sub(lambda m: f'href="/dictionary/{lang}/{m.group(1)}"', container)
+
+            # Save back
+            info["container"] = container
+
+            if original_container != container:
+                print(f"✅ Cleaned {lang.upper()} for word {word_id}")
+
+
+    # Save cleaned JSON back
+    with open(json_filepath, "w", encoding="utf-8") as out:
+        json.dump(data, out, ensure_ascii=False, indent=2)
+
+    print(f"✅ Cleaned containers successfully.")
+
+
     
 
 def collect_dictionary():
