@@ -26,6 +26,7 @@
 }
 
 .table-container {
+  border-radius: 8px;
   background: white;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -261,9 +262,7 @@
   color: #4a5568;
   text-decoration: none;
   border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 2px;
-  font-size: 0.7rem;
-  font-weight: 600;
+  font-size: 0.85rem;
   transition: all 0.2s ease;
   min-width: 28px;
   height: 24px;

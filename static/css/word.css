@@ -140,7 +140,7 @@
 }
 .word-footer .word-nav {
   display: flex;
-  justify-content: space-between;
+  justify-content: right;
   align-items: center;
   flex-wrap: wrap;
   gap: 1rem;
@@ -297,4 +297,30 @@
 }
 .word-content .row.source-media {
   display: none !important;
+}
+
+.word-index-info.original a {
+  text-decoration: none;
+}
+
+.word-index-info.original {
+  transition: all 0.2s ease;
+}
+
+.word-index-info.original:hover {
+  background-color: #ffe066; /* soft yellow highlight */
+}
+
+tr[onclick] {
+  pointer-events: none; /* disable clicks on the row itself */
+  cursor: default !important;
+}
+
+tr[onclick] a {
+  pointer-events: auto; /* re-enable clicks inside anchors */
+  cursor: pointer;
+}
+
+span.menukad {
+  text-decoration: none;
 }/*# sourceMappingURL=word.css.map */

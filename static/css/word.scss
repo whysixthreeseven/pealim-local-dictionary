@@ -175,7 +175,7 @@ $font-mono: monospace;
     
     .word-nav {
         display: flex;
-        justify-content: space-between;
+        justify-content: right;
         align-items: center;
         flex-wrap: wrap;
         gap: 1rem;
@@ -374,3 +374,27 @@ $font-mono: monospace;
     
 }
 
+.word-index-info.original a {
+    text-decoration: none;
+}
+
+.word-index-info.original {
+    transition: all 0.2s ease;
+}
+.word-index-info.original:hover {
+    background-color: $color-highlight;  /* soft yellow highlight */
+}
+
+tr[onclick] {
+    pointer-events: none; /* disable clicks on the row itself */
+    cursor: default !important;
+}
+
+tr[onclick] a {
+    pointer-events: auto; /* re-enable clicks inside anchors */
+    cursor: pointer;
+}
+
+span.menukad {
+    text-decoration: none;
+}

@@ -66,6 +66,10 @@
                 <div class="word-index-info">
                     Pealim Index: {{ word.INDEX }}
                 </div>
+
+                <div class="word-index-info original">
+                    <a href="{{ word.PEALIM_URL_RU if language == "ru" else word.PEALIM_URL_EN if language == "en" else word.PEALIM_URL_HE }}">Original</a>
+                </div>
             </div>
         </div>
 
