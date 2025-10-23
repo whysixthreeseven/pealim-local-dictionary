@@ -14,39 +14,24 @@
 {% block content %}
     <div class="search-results-container">
         {% if not query %}
-            <h2>Enter a word to search.</h2>
+            <div class="results-header">
+                <h1 class="results-title">Nothing here...</h1>
+                <p class="results-subtitle">Try searching for something</p>
+            </div>
         {% elif not results %}
-            <h2>No results found for "{{ query }}"</h2>
+            <div class="results-header">
+                <h1 class="results-title">No results found for "{{ query }}"</h1>
+                <p class="results-subtitle">Try searching for something else</p>
+            </div>
         {% else %}
-            <h2>Results for "{{ query }}" ({{ language|upper }})</h2>
+            <div class="results-header">
+                <h1 class="results-title">{{ query|capitalize }}</h1>
+                <p class="results-subtitle">{{ results|length }} word{{ results|length != 1 and 's' or '' }} found</p>
+            </div>
 
             <div class="cards-grid">
                 {% for word in results %}
-                    <div class="word-card">
-                        <div class="word-card-header">
-                            <h2 class="word-hebrew">{{ word.HEBREW }}</h2>
-                            <p class="word-translation">{{ word.TRANSLATION }}</p>
-                        </div>
-
-                        <div class="word-card-actions">
-                            <div class="lang-buttons">
-                                <a href="{{ url_for('word.word_detail', language='ru', word_index=word.INDEX) }}" class="lang-btn">RU</a>
-                                <a href="{{ url_for('word.word_detail', language='en', word_index=word.INDEX) }}" class="lang-btn">EN</a>
-                                <a href="{{ url_for('word.word_detail', language='he', word_index=word.INDEX) }}" class="lang-btn">HE</a>
-                            </div>
-
-                            <div class="status-buttons">
-                                <button class="fav-btn">
-                                    <i class="icon-star hollow"></i>
-                                </button>
-                                <div class="hat-buttons">
-                                    <button class="hat grey"></button>
-                                    <button class="hat red"></button>
-                                    <button class="hat green"></button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    {% include "components/card.html" %}
                 {% endfor %}
             </div>
         {% endif %}

@@ -55,8 +55,8 @@ class SETTINGS:
     
     # Application configuration:
     APP_NAME:    str  = "PEALIM-LOCAL-DICTIONARY"
-    APP_VERSION: str  = "0.0.1dev"
-    APP_UPDATED: str  = "2025.10.21"
+    APP_VERSION: str  = "0.1t"
+    APP_UPDATED: str  = "2025.10.23"
     APP_ROOT:    str  = _ROOT_PATH
     APP_HOST:    str  = "0.0.0.0"
     APP_PORT:    int  = 5000

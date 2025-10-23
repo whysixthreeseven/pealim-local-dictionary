@@ -1,8 +1,8 @@
 <div class="word-card">
 
     <div class="word-card-header">
-        <h2 class="word-hebrew">{{ word.HEBREW }}</h2>
-        <p class="word-translation">{{ word.TRANSLATION }}</p>
+        <h2 class="word-hebrew">{{ word.TRANSLATION_LANG_HE }}</h2>
+        <p class="word-translation">{{ word.TRANSLATION_LANG_RU if language == "ru" else word.TRANSLATION_LANG_EN }}</p>
     </div>
 
     <div class="word-card-actions">
