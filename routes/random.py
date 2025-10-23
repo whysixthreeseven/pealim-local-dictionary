@@ -54,12 +54,23 @@ def random():
     database_entry_count: int = session.get('DATABASE_ENTRY_COUNT', 0)
     
     # Rerouting to /database on empty database check:
-    if not database_attached or not database_entry_count:
-        log.warning("Random page requested, but database not attached or empty")
-        page_route: str = render_template(
-            template_name_or_list = "database.html",
-            )
-        return page_route
+    if not database_attached or database_entry_count == 0:
+
+        # Veryfiying data:
+        from utilities import verification
+        verification.verify_data()
+
+        # Checking database entry count:
+        database_attached: bool = session.get('DATABASE_ATTACHED', False)
+        database_entry_count: int = session.get('DATABASE_ENTRY_COUNT', 0)
+
+        # Rerouting to /database on empty database check:
+        if not database_attached or database_entry_count == 0:
+            log.warning("Random page requested, but database not attached or empty")
+            page_route: str = render_template(
+                template_name_or_list = "database.html",
+                )
+            return page_route
 
     # Random offset selection:
     random_index: int = randint(0, database_entry_count - 1)

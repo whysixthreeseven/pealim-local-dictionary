@@ -71,10 +71,10 @@ def search():
         
         # English language:
         search_results = (
-            Word.query.filter(
-                func.lower(func.cast(Word.SEARCH_LANG_EN, DATABASE.String)).like(search_pattern)
-                ).all()
+            Word.query.filter(func.lower(Word.TRANSLATION_LANG_EN).like(search_pattern)).all()
             )
+        
+        print(search_pattern, search_results)
         if search_results:
             search_language = "en"
             log.info(f"Found {len(search_results)} English results for '{query_input}'")
@@ -82,10 +82,9 @@ def search():
         #  Russian language:
         if not search_results:
             search_results = (
-                Word.query.filter(
-                    func.lower(func.cast(Word.SEARCH_LANG_RU, DATABASE.String)).like(search_pattern)
-                    ).all()
+                Word.query.filter(func.lower(Word.TRANSLATION_LANG_RU).like(search_pattern)).all()
                 )
+            print(search_pattern, search_results)
             if search_results:
                 search_language = "ru"
                 log.info(f"Found {len(search_results)} Russian results for '{query_input}'")
@@ -93,10 +92,9 @@ def search():
         # Hebrew language:
         if not search_results:
             search_results = (
-                Word.query.filter(
-                    func.lower(func.cast(Word.SEARCH_LANG_HE, DATABASE.String)).like(search_pattern)
-                    ).all()
+                Word.query.filter(func.lower(Word.TRANSLATION_LANG_HE).like(search_pattern)).all()
                 )
+            print(search_pattern, search_results)
             if search_results:
                 search_language = "he"
                 log.info(f"Found {len(search_results)} Hebrew results for '{query_input}'")

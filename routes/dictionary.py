@@ -1,5 +1,5 @@
 # Flask-related imports:
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, session
 from typing import Any
 
 # Settings and database imports:
@@ -41,6 +41,12 @@ def dictionary() -> str:
     """
     Display dictionary words with pagination.
     """
+
+    # Checking database status:
+    database_entry_count: int = session.get("DATABASE_ENTRY_COUNT")
+    if database_entry_count == 0:
+        from utilities import verification
+        verification.verify_data()
 
     # Getting page number from query parameters, default to 1
     page = request.args.get('page', 1, type = int)
