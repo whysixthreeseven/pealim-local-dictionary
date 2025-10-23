@@ -82,9 +82,10 @@ DATABASE SETUP CREATION
 
 # Database import:
 from utilities.database import DATABASE
+from utilities.database import environment
 
 # Utilities import:
-from utilities.database import environment
+from utilities import verification
 
 
 # Creating database:
@@ -104,7 +105,6 @@ with application.app_context():
     DATABASE.create_all()
     log.info("Database tables created")
 
-   
     
 """
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

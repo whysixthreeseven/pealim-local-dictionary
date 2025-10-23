@@ -94,12 +94,13 @@ def database() -> str:
                     rebuild_success = False
                     log.error(f"Database rebuild failed: {exception_error}")
     
+
     # Preparing template context from session data:
     context: dict[str, Any] = {
         'json_status': verification.status_json(),
-        'json_count': session.get('JSON_DATA_COUNT', 0),
+        'json_count': session.get('JSON_DATA_COUNT', 0) or 0,
         'database_status': verification.status_database(),
-        'database_count': session.get('DATABASE_ENTRY_COUNT', 0),
+        'database_count': session.get('DATABASE_ENTRY_COUNT', 0) or 0,
         'rebuild_success': rebuild_success,
         'rebuild_count': rebuild_entry_count
         }
