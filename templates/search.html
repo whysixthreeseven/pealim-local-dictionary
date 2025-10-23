@@ -3,10 +3,53 @@
 {% block stylesheet %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/card.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
 {% endblock stylesheet %}
 
 {% block navigation %}
     {% include "components/navigation.html" %}
 {% endblock navigation %}
 
-Search
+{% block content %}
+    <div class="search-results-container">
+        {% if not query %}
+            <h2>Enter a word to search.</h2>
+        {% elif not results %}
+            <h2>No results found for "{{ query }}"</h2>
+        {% else %}
+            <h2>Results for "{{ query }}" ({{ language|upper }})</h2>
+
+            <div class="cards-grid">
+                {% for word in results %}
+                    <div class="word-card">
+                        <div class="word-card-header">
+                            <h2 class="word-hebrew">{{ word.HEBREW }}</h2>
+                            <p class="word-translation">{{ word.TRANSLATION }}</p>
+                        </div>
+
+                        <div class="word-card-actions">
+                            <div class="lang-buttons">
+                                <a href="{{ url_for('word.word_detail', language='ru', word_index=word.INDEX) }}" class="lang-btn">RU</a>
+                                <a href="{{ url_for('word.word_detail', language='en', word_index=word.INDEX) }}" class="lang-btn">EN</a>
+                                <a href="{{ url_for('word.word_detail', language='he', word_index=word.INDEX) }}" class="lang-btn">HE</a>
+                            </div>
+
+                            <div class="status-buttons">
+                                <button class="fav-btn">
+                                    <i class="icon-star hollow"></i>
+                                </button>
+                                <div class="hat-buttons">
+                                    <button class="hat grey"></button>
+                                    <button class="hat red"></button>
+                                    <button class="hat green"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+
+{% endblock %}

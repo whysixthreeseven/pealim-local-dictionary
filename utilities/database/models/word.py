@@ -82,7 +82,7 @@ class Word(DATABASE.Model):
     """
     
     
-    def __generate_page_url(self, local_language: str = "ru") -> str:
+    def __generate_pealim_page_url(self, local_language: str = "ru") -> str:
         """
         Generates a Pealim dictionary URL for the word in the specified language.
         
@@ -134,7 +134,7 @@ class Word(DATABASE.Model):
         """
         
         # Aquiring url in local language:
-        page_url: str = self.__generate_page_url(local_language = "ru")
+        page_url: str = self.__generate_pealim_page_url(local_language = "ru")
         
         # Returning:
         return page_url
@@ -153,7 +153,7 @@ class Word(DATABASE.Model):
         """
         
         # Aquiring url in local language:
-        page_url: str = self.__generate_page_url(local_language = "en")
+        page_url: str = self.__generate_pealim_page_url(local_language = "en")
         
         # Returning:
         return page_url
@@ -172,7 +172,7 @@ class Word(DATABASE.Model):
         """
         
         # Aquiring url in local language:
-        page_url: str = self.__generate_page_url(local_language = "he")
+        page_url: str = self.__generate_pealim_page_url(local_language = "he")
         
         # Returning:
         return page_url

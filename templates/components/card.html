@@ -1,0 +1,26 @@
+<div class="word-card">
+
+    <div class="word-card-header">
+        <h2 class="word-hebrew">{{ word.HEBREW }}</h2>
+        <p class="word-translation">{{ word.TRANSLATION }}</p>
+    </div>
+
+    <div class="word-card-actions">
+        <div class="lang-buttons">
+            <a href="{{ url_for('word.word_detail', language='ru', word_index=word.INDEX) }}" class="lang-btn">RU</a>
+            <a href="{{ url_for('word.word_detail', language='en', word_index=word.INDEX) }}" class="lang-btn">EN</a>
+            <a href="{{ url_for('word.word_detail', language='he', word_index=word.INDEX) }}" class="lang-btn">HE</a>
+        </div>
+
+        <div class="status-buttons">
+            <button class="fav-btn">
+                <i class="icon-star hollow"></i> <!-- add 'filled' class for yellow -->
+            </button>
+            <div class="hat-buttons">
+                <button class="hat grey"></button>
+                <button class="hat red"></button>
+                <button class="hat green"></button>
+            </div>
+        </div>
+    </div>
+</div>

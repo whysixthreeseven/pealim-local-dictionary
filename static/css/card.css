@@ -1,0 +1,148 @@
+/* ========== CARD LAYOUT GRID ========== */
+.search-results-container .cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  list-style: none;
+  /* width constraint and centering */
+  max-width: 1200px;
+  margin: 0 auto; /* centers the container horizontally */
+  padding: 0 12px; /* optional: small horizontal breathing room */
+}
+
+/* ========== CARD STYLE ========== */
+.word-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: #f9fafc; /* $color-bg */
+  border: 1px solid #e2e8f0;
+  padding: 14px 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  color: #1a202c; /* $color-text */
+  font-family: "Segoe UI", sans-serif;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.word-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 180, 216, 0.25); /* $color-accent glow */
+}
+
+/* ========== HEADER ========== */
+.word-card-header {
+  margin-bottom: 10px;
+}
+
+.word-hebrew {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin: 0;
+  color: #00b4d8; /* $color-accent */
+}
+
+.word-translation {
+  font-size: 1rem;
+  color: #4a5568; /* $color-muted */
+  margin: 3px 0 0 0;
+}
+
+/* ========== ACTIONS ========== */
+.word-card-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 12px;
+}
+
+/* Language buttons */
+.lang-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.lang-btn {
+  background: #e6f9fd;
+  border: 1px solid #00b4d8;
+  color: #007a99;
+  padding: 4px 8px;
+  text-decoration: none;
+  font-size: 0.9rem;
+  font-weight: 500;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.lang-btn:hover {
+  background: #00b4d8;
+  color: white;
+}
+
+/* ========== STATUS BUTTONS ========== */
+.status-buttons {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Star (favourite) button */
+.fav-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #cbd5e0;
+  font-size: 1.3rem;
+  transition: color 0.2s ease;
+}
+
+.fav-btn:hover {
+  color: #ffe066; /* $color-highlight */
+}
+
+.fav-btn .filled {
+  color: #ffe066; /* $color-highlight */
+}
+
+/* Hat buttons */
+.hat-buttons {
+  display: flex;
+  gap: 4px;
+}
+
+.hat {
+  width: 16px;
+  height: 16px;
+  border: 1px solid #cbd5e0;
+  background-color: #edf2f7;
+  cursor: pointer;
+  transition: background 0.15s ease, border 0.15s ease;
+}
+
+.hat.grey {
+  background-color: #a0aec0;
+}
+
+.hat.red {
+  background-color: #f56565;
+}
+
+.hat.green {
+  background-color: #48bb78;
+}
+
+.hat:hover {
+  border-color: #00b4d8;
+}
+
+.cards-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* Limit to 4 cards per row max */
+@media (min-width: 1200px) {
+  .cards-grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}/*# sourceMappingURL=card.css.map */

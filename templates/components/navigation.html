@@ -24,18 +24,22 @@
             Random
         </a>
 
-        <!-- Search Bar -->
+       <!-- Search Bar -->
         <div class="nav-search">
             <div class="search-container">
-                <input 
-                    type="text" 
-                    class="search-input" 
-                    placeholder="Search..."
-                    aria-label="Search dictionary"
-                >
-                <button class="search-btn" aria-label="Search">
-                    <span class="search-icon">››</span>
-                </button>
+                <form method="GET" action="{{ url_for('search.search') }}" class="search-form">
+                    <input 
+                        type="text" 
+                        class="search-input" 
+                        name="query"
+                        placeholder="Search..."
+                        aria-label="Search dictionary"
+                        required
+                    >
+                    <button class="search-btn" aria-label="Search" type="submit">
+                        <span class="search-icon">››</span>
+                    </button>
+                </form>
             </div>
         </div>
     </div>

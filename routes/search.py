@@ -109,7 +109,7 @@ def search():
 
     # Page routing:
     page_route: str = render_template(
-        "search_results.html",
+        "search.html",
         query=query_input,
         results=search_results,
         language=search_language
@@ -117,3 +117,4 @@ def search():
     
     # Returning:
     return page_route
+
