@@ -4,7 +4,6 @@ $color-text: #1a202c;
 $color-muted: #4a5568;
 $color-accent: #00b4d8;
 $color-highlight: #ffe066;
-$font-mono: monospace;
 
 /* Search Results Header */
 .results-header {
@@ -15,7 +14,6 @@ $font-mono: monospace;
     .results-title {
         font-size: 2rem;
         font-weight: 700;
-        font-family: $font-mono;
         color: $color-text;
         margin: 0 0 0.5rem 0;
         background: linear-gradient(120deg, transparent 65%, $color-highlight 65%);
@@ -26,7 +24,6 @@ $font-mono: monospace;
     .results-subtitle {
         font-size: 1rem;
         color: $color-muted;
-        font-family: $font-mono;
         margin: 0;
     }
 }

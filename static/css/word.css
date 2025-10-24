@@ -3,7 +3,6 @@
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 2rem;
-  font-family: monospace;
 }
 
 .word-header {
@@ -19,7 +18,6 @@
   margin: 0 0 1rem 0;
 }
 .word-header .word-title:lang(he) {
-  font-family: "Arial Hebrew", "Times New Roman", serif;
   direction: rtl;
 }
 .word-header .word-subtitle {
@@ -117,7 +115,6 @@
   background: white;
 }
 .word-content .menukad {
-  font-family: "Arial Hebrew", "Times New Roman", serif;
   font-size: 1.1em;
   color: #1a202c;
 }

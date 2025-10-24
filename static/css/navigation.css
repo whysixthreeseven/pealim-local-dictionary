@@ -7,7 +7,6 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
-  font-family: monospace;
   border-bottom: 2px solid rgba(0, 0, 0, 0.05);
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
   z-index: 1000;
@@ -83,7 +82,6 @@
   padding: 0.7rem 1rem;
   border: none;
   background: transparent;
-  font-family: monospace;
   font-size: 1rem;
   color: #1a202c;
   min-width: 150px;
@@ -109,7 +107,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: monospace;
   font-size: 1rem;
   font-weight: 500;
 }

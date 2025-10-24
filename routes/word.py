@@ -84,10 +84,6 @@ def word_detail(language: str, word_index: int) -> str:
         'hebrew_word': word.TRANSLATION_LANG_HE,
         }
     
-    # DEBUG:
-    import pprint
-    pprint.pprint(word.__dict__)
-
     # Generating page route:
     page_route: str = render_template(
         template_name_or_list = WORD_PAGE_HTML, 

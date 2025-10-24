@@ -1,0 +1,19 @@
+@font-face {
+    font-family: "NotoSansHebrew";
+    src: url("/static/fonts/NotoSansHebrew.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: "FiraCode";
+    src: url("/static/fonts/FiraCode.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+}
+
+  
+
+body {
+    font-family: "NotoSansHebrew", "FiraCode", monospace !important;
+}

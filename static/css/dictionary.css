@@ -3,7 +3,6 @@
   max-width: 1200px;
   margin: 2rem auto;
   padding: 0 2rem;
-  font-family: monospace;
 }
 
 .dictionary-header {
@@ -137,7 +136,6 @@
   padding: 0.5rem;
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 4px;
-  font-family: monospace;
   font-size: 0.85rem;
   text-align: center;
   background: white;
@@ -172,7 +170,6 @@
   color: white;
   border: none;
   border-radius: 4px;
-  font-family: monospace;
   font-size: 0.85rem;
   font-weight: 500;
   cursor: pointer;

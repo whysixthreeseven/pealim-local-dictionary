@@ -4,7 +4,6 @@ $color-text: #1a202c;
 $color-muted: #4a5568;
 $color-accent: #00b4d8;
 $color-highlight: #ffe066;
-$font-mono: monospace;
 
 // Word Container
 .word-container {
@@ -12,7 +11,6 @@ $font-mono: monospace;
     max-width: 1200px;
     margin: 2rem auto;
     padding: 0 2rem;
-    font-family: $font-mono;
 }
 
 // Word Header
@@ -30,7 +28,6 @@ $font-mono: monospace;
         
         // Special styling for Hebrew text
         &:lang(he) {
-            font-family: 'Arial Hebrew', 'Times New Roman', serif;
             direction: rtl;
         }
     }
@@ -148,7 +145,6 @@ $font-mono: monospace;
     }
     
     .menukad {
-        font-family: 'Arial Hebrew', 'Times New Roman', serif;
         font-size: 1.1em;
         color: $color-text;
     }
