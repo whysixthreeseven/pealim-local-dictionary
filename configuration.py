@@ -29,6 +29,8 @@ _FOLDER_JS_NAME: str = "js"
 _FOLDER_JS_PATH: str = os.path.join(_FOLDER_STATIC_PATH, _FOLDER_JS_NAME)
 _FOLDER_IMAGES_NAME: str = "images"
 _FOLDER_IMAGES_PATH: str = os.path.join(_FOLDER_STATIC_PATH, _FOLDER_IMAGES_NAME)
+_FOLDER_FONTS_NAME: str = "fonts"
+_FOLDER_FONTS_PATH: str = os.path.join(_FOLDER_STATIC_PATH, _FOLDER_FONTS_NAME)
 
 # Database filename and -path variables:
 _DB_COMMON_FILENAME: str = "common.db"
@@ -56,10 +58,10 @@ class SETTINGS:
     # Application configuration:
     APP_NAME:    str  = "PEALIM-LOCAL-DICTIONARY"
     APP_VERSION: str  = "0.1t"
-    APP_UPDATED: str  = "2025.10.23"
+    APP_UPDATED: str  = "2025.10.24"
     APP_ROOT:    str  = _ROOT_PATH
     APP_HOST:    str  = "0.0.0.0"
-    APP_PORT:    int  = 5000
+    APP_PORT:    int  = 5001            # <- for MacOS
     APP_DEBUG:   bool = True
     APP_RELOAD:  bool = True
     
@@ -73,14 +75,15 @@ class SETTINGS:
     SQLALCHEMY_TRACK_MODIFICATIONS: bool = False
     
     # Folders configuration:
-    FOLDER_DATABASE_PATH:     str = _FOLDER_DATABASE_PATH     # /database/
-    FOLDER_UTILITIES_PATH:    str = _FOLDER_UTILITIES_PATH    # /utilities/
-    FOLDER_TEMPLATES_PATH:    str = _FOLDER_TEMPLATES_PATH    # /templates/
-    FOLDER_COMPONENTS_PATH:   str = _FOLDER_COMPONENTS_PATH   # /templates/components/
-    FOLDER_STATIC_PATH:       str = _FOLDER_STATIC_PATH       # /static/
-    FOLDER_CSS_PATH:          str = _FOLDER_CSS_PATH          # /static/css/
-    FOLDER_JS_PATH:           str = _FOLDER_JS_PATH           # /static/js/
-    FOLDER_IMAGES_PATH:       str = _FOLDER_IMAGES_PATH       # /static/images/
+    FOLDER_DATABASE_PATH:     str = _FOLDER_DATABASE_PATH       # /database/
+    FOLDER_UTILITIES_PATH:    str = _FOLDER_UTILITIES_PATH      # /utilities/
+    FOLDER_TEMPLATES_PATH:    str = _FOLDER_TEMPLATES_PATH      # /templates/
+    FOLDER_COMPONENTS_PATH:   str = _FOLDER_COMPONENTS_PATH     # /templates/components/
+    FOLDER_STATIC_PATH:       str = _FOLDER_STATIC_PATH         # /static/
+    FOLDER_CSS_PATH:          str = _FOLDER_CSS_PATH            # /static/css/
+    FOLDER_JS_PATH:           str = _FOLDER_JS_PATH             # /static/js/
+    FOLDER_IMAGES_PATH:       str = _FOLDER_IMAGES_PATH         # /static/images/
+    FOLDER_FONTS_PATH:        str = _FOLDER_FONTS_PATH          # /static/fonts/
     
     # Database and collection configuration:
     DATABASE_FILEPATH:        str = _DB_COMMON_FILEPATH
