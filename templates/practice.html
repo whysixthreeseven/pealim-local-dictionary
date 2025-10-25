@@ -1,0 +1,203 @@
+{% extends "components/layout.html" %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/common.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/navigation.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/practice.css') }}">
+{% endblock stylesheet %}
+
+{% block navigation %}
+    {% include "components/navigation.html" %}
+{% endblock navigation %}
+
+{% block content %}
+<div class="dictionary-container">
+
+        <!-- Header -->
+        <div class="dictionary-header">
+            <h1 class="dictionary-title">Dictionary</h1>
+            <p class="dictionary-subtitle">Showing {{ words|length }} of {{ pagination.total_words }} words</p>
+        </div>
+
+        <!-- Words Table -->
+        <div class="table-container">
+            <table class="words-table">
+                <thead>
+                    <tr>
+                        <th class="column-id"></th>
+                        <!-- <th class="column-index">Index</th> -->
+                        <th class="column-languages">Languages</th>
+                        <th class="column-translation-he">Hebrew</th>
+                        <th class="column-translation-en">English</th>
+                        <th class="column-translation-ru">Russian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for word in words %}
+                    <tr class="word-row">
+                        <td class="cell-id">{{ word.ID }}</td>
+                        <!-- <td class="cell-index">{{ word.INDEX }}</td> -->
+                        <td class="cell-languages">
+                            <div class="language-buttons">
+                                {% if word.LANG_RU_AVAILABLE %}
+                                    <a href="{{ url_for('word.word_detail', language='ru', word_index=word.INDEX) }}" 
+                                        class="lang-btn lang-ru" 
+                                        title="View in Russian">
+                                        RU
+                                    </a>
+                                {% endif %}
+                                <a href="{{ url_for('word.word_detail', language='en', word_index=word.INDEX) }}" 
+                                   class="lang-btn lang-en" 
+                                   title="View in English">
+                                    EN
+                                </a>
+                                <a href="{{ url_for('word.word_detail', language='he', word_index=word.INDEX) }}" 
+                                   class="lang-btn lang-he" 
+                                   title="View in Hebrew">
+                                    HE
+                                </a>
+                            </div>
+                        </td>
+                        <td class="cell-translation-he">{{ word.TRANSLATION_LANG_HE }}</td>
+                        <td class="cell-translation-en">{{ word.TRANSLATION_LANG_EN }}</td>
+                        <td class="cell-translation-ru"> {{ word.TRANSLATION_LANG_RU if word.LANG_RU_AVAILABLE else '—' }}</td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="3" class="no-words">No words found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination Controls (Bottom) -->
+        <div class="pagination-container">
+            <div class="pagination-info">
+                Page {{ pagination.current_page }} of {{ pagination.total_pages }}
+            </div>
+            
+            <div class="pagination-controls">
+
+                <!-- First Page -->
+                {% if pagination.has_prev %}
+                <a href="{{ url_for('dictionary.dictionary', page=1) }}" class="pagination-btn pagination-first">
+                    <span>« First</span>
+                </a>
+                {% else %}
+                <span class="pagination-btn pagination-first disabled">
+                    <span>« First</span>
+                </span>
+                {% endif %}
+
+                <!-- Previous Page -->
+                {% if pagination.has_prev %}
+                <a href="{{ url_for('dictionary.dictionary', page=pagination.prev_page) }}" class="pagination-btn pagination-prev">
+                    <span>‹ Prev</span>
+                </a>
+                {% else %}
+                <span class="pagination-btn pagination-prev disabled">
+                    <span>‹ Prev</span>
+                </span>
+                {% endif %}
+
+                <!-- Page Numbers (show limited range) -->
+                {% set start_page = [1, pagination.current_page - 2]|max %}
+                {% set end_page = [pagination.total_pages, pagination.current_page + 2]|min %}
+                
+                {% for p in range(start_page, end_page + 1) %}
+                    {% if p == pagination.current_page %}
+                    <span class="pagination-btn pagination-current">
+                        <span>{{ p }}</span>
+                    </span>
+                    {% else %}
+                    <a href="{{ url_for('dictionary.dictionary', page=p) }}" class="pagination-btn">
+                        <span>{{ p }}</span>
+                    </a>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- Page Jump Input -->
+                <div class="page-jump-container">
+                    <input 
+                        type="number" 
+                        id="page-jump-input-bottom"
+                        class="page-jump-input" 
+                        min="1" 
+                        max="{{ pagination.total_pages }}"
+                        placeholder="{{ pagination.current_page }}"
+                        aria-label="Jump to page"
+                    >
+                    <button 
+                        type="button" 
+                        class="page-jump-btn"
+                        onclick="jumpToPage('bottom')"
+                        aria-label="Go to page"
+                    >
+                        Go
+                    </button>
+                </div>
+
+                <!-- Next Page -->
+                {% if pagination.has_next %}
+                <a href="{{ url_for('dictionary.dictionary', page=pagination.next_page) }}" class="pagination-btn pagination-next">
+                    <span>Next ›</span>
+                </a>
+                {% else %}
+                <span class="pagination-btn pagination-next disabled">
+                    <span>Next ›</span>
+                </span>
+                {% endif %}
+
+                <!-- Last Page -->
+                {% if pagination.has_next %}
+                <a href="{{ url_for('dictionary.dictionary', page=pagination.total_pages) }}" class="pagination-btn pagination-last">
+                    <span>Last »</span>
+                </a>
+                {% else %}
+                <span class="pagination-btn pagination-last disabled">
+                    <span>Last »</span>
+                </span>
+                {% endif %}
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        function jumpToPage(location = 'top') {
+            const inputId = location === 'top' ? 'page-jump-input' : 'page-jump-input-bottom';
+            const input = document.getElementById(inputId);
+            const page = parseInt(input.value);
+            const totalPages = {{ pagination.total_pages }}; 
+            
+            if (page && page >= 1 && page <= totalPages) {
+                window.location.href = "{{ url_for('dictionary.dictionary') }}?page=" + page;
+            } else {
+                // Show error or reset input
+                input.value = '';
+                input.placeholder = '1-' + totalPages;
+                input.focus();
+            }
+        }
+    
+        // Add Enter key support
+        document.addEventListener('DOMContentLoaded', function() {
+            function handleEnterKey(event, location) {
+                if (event.key === 'Enter') {
+                    jumpToPage(location);
+                }
+            }
+    
+            const topInput = document.getElementById('page-jump-input');
+            const bottomInput = document.getElementById('page-jump-input-bottom');
+            
+            if (topInput) {
+                topInput.addEventListener('keypress', (e) => handleEnterKey(e, 'top'));
+            }
+            if (bottomInput) {
+                bottomInput.addEventListener('keypress', (e) => handleEnterKey(e, 'bottom'));
+            }
+        });
+    </script>
+{% endblock content %}
