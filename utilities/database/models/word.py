@@ -3,22 +3,17 @@ import logging
 log = logging.getLogger(__name__)
 
 # Database types:
-from sqlalchemy import Column, Integer, String, DateTime, JSON, Boolean
+from sqlalchemy import Column, Integer, String, JSON, Boolean
 from sqlalchemy.orm import validates
 
 # Typing and annotations import
-from typing import Any, Literal, Optional
+from typing import Optional
 
 # HTML composition related imports:
 from bs4 import BeautifulSoup
-import re
 
 # Database import:
 from utilities.database import DATABASE
-
-# Utilities import:
-from utilities.database.models import context
-from utilities.database import scripts
 
 
 """
