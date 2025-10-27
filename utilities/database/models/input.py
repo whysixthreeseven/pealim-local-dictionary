@@ -11,7 +11,7 @@ from utilities.database import DATABASE
 
 """
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-WORD DATABASE MODEL
+INPUT DATABASE MODEL
 
 """
 

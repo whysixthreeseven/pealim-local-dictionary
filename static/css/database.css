@@ -137,7 +137,7 @@
   box-shadow: 0 2px 10px rgba(0, 180, 216, 0.3);
 }
 .status-actions .check-button:hover {
-  background: rgb(0, 137.5, 165);
+  background: #008aa5;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(0, 180, 216, 0.4);
 }
@@ -182,7 +182,7 @@
   box-shadow: 0 2px 10px rgba(220, 38, 38, 0.3);
 }
 .rebuild-button:hover {
-  background: rgb(178.25, 28.75, 28.75);
+  background: #b21d1d;
   transform: translateY(-2px);
   box-shadow: 0 4px 15px rgba(220, 38, 38, 0.4);
 }
@@ -348,7 +348,7 @@
   appearance: button;
 }
 .page-jump-btn:hover {
-  background: rgb(0, 137.5, 165);
+  background: #008aa5;
   transform: translateY(-1px);
 }
 .page-jump-btn:active {

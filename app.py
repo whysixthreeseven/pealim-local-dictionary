@@ -98,6 +98,7 @@ log.info("Database instance created")
 
 # Database model import:
 from utilities.database.models.word import Word
+from utilities.database.models.input import Input
 
 # Initializing database:
 environment.initialize_database_environment()
@@ -121,8 +122,7 @@ from routes.favourites import FAVOURITES_BLUEPRINT
 from routes.random import RANDOM_BLUEPRINT
 from routes.search import SEARCH_BLUEPRINT
 from routes.word import WORD_BLUEPRINT
-# from routes.practice.input import INPUT_BLUEPRINT
-# from routes.practice.view import VIEW_BLUEPRINT
+from routes.practice import PRACTICE_BLUEPRINT
 
 
 # Registering blueprints:
@@ -130,11 +130,10 @@ application.register_blueprint(blueprint = HOME_BLUEPRINT)
 application.register_blueprint(blueprint = DICTIONARY_BLUEPRINT)
 application.register_blueprint(blueprint = DATABASE_BLUEPRINT)
 application.register_blueprint(blueprint = FAVOURITES_BLUEPRINT)
+application.register_blueprint(blueprint = PRACTICE_BLUEPRINT)
 application.register_blueprint(blueprint = RANDOM_BLUEPRINT)
 application.register_blueprint(blueprint = SEARCH_BLUEPRINT)
 application.register_blueprint(blueprint = WORD_BLUEPRINT)
-# application.register_blueprint(blueprint = INPUT_BLUEPRINT)
-# application.register_blueprint(blueprint = VIEW_BLUEPRINT)
 
 # Logging:
 log.info("Routing blueprints registered")

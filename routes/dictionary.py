@@ -17,11 +17,11 @@ BLUEPRINT AND VARIABLES BLOCK
 
 # Generating blueprint:
 DICTIONARY_BLUEPRINT: Blueprint = Blueprint(
-    name="dictionary",
-    import_name=__name__,
-    template_folder=SETTINGS.FOLDER_TEMPLATES_PATH,
-    static_folder=SETTINGS.FOLDER_STATIC_PATH,
-)
+    name = "dictionary",
+    import_name = __name__,
+    template_folder = SETTINGS.FOLDER_TEMPLATES_PATH,
+    static_folder = SETTINGS.FOLDER_STATIC_PATH,
+    )
 
 # Getting constants:
 DICTIONARY_PAGE_URL: str = "/dictionary"

@@ -179,7 +179,7 @@
   appearance: button;
 }
 .page-jump-btn:hover {
-  background: rgb(0, 137.5, 165);
+  background: #008aa5;
   transform: translateY(-1px);
 }
 .page-jump-btn:active {
@@ -303,7 +303,7 @@
   transition: background-color 0.2s ease, box-shadow 0.2s ease;
 }
 .words-table tr:hover {
-  background-color: rgb(190.5, 244.25, 255);
+  background-color: #bff4ff;
   box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.05);
 }
 .words-table tbody .cell-languages {

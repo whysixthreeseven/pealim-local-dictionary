@@ -1,0 +1,35 @@
+.add-word-form {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 6px;
+  margin-bottom: 1rem;
+  width: 100%;
+  overflow-x: auto;
+}
+.add-word-form .input-field {
+  flex: 1;
+  min-width: 120px;
+  padding: 0.6rem 0.8rem;
+  font-size: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+}
+.add-word-form .input-field:focus {
+  border-color: #00b4d8;
+  box-shadow: 0 2px 6px rgba(0, 180, 216, 0.3);
+  outline: none;
+}
+.add-word-form .add-btn {
+  padding: 0.6rem 1.2rem;
+  font-size: 1rem;
+  background: #00b4d8;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.add-word-form .add-btn:hover {
+  background: #008aa5;
+  box-shadow: 0 2px 6px rgba(0, 180, 216, 0.4);
+  transform: translateY(-1px);
+}/*# sourceMappingURL=practice.css.map */
