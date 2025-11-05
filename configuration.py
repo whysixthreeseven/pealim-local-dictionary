@@ -57,8 +57,8 @@ class SETTINGS:
     
     # Application configuration:
     APP_NAME:    str  = "PEALIM-LOCAL-DICTIONARY"
-    APP_VERSION: str  = "0.1t"
-    APP_UPDATED: str  = "2025.10.29"
+    APP_VERSION: str  = "1.0V"
+    APP_UPDATED: str  = "2025.11.05"
     APP_ROOT:    str  = _ROOT_PATH
     APP_HOST:    str  = "0.0.0.0"
     APP_PORT:    int  = 5001            # <- for MacOS
